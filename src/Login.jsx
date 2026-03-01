@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { saveSession } from "./auth";
+import "./login.css";
 
 export default function Login({ onSuccess }) {
   const [username, setUsername] = useState("");
@@ -25,17 +26,27 @@ export default function Login({ onSuccess }) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <div style={{ width: 320, background: "#fff", padding: 30 }}>
-        <h2>Iniciar sesión</h2>
+  <div className="login-container">
+    <div className="login-card">
+      <h2>Iniciar sesión</h2>
 
-        <input placeholder="Usuario" onChange={e => setUsername(e.target.value)} />
-        <input type="password" placeholder="Contraseña" onChange={e => setPassword(e.target.value)} />
+      <input
+        placeholder="Usuario"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+      <input
+        type="password"
+        placeholder="Contraseña"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
 
-        <button onClick={login}>Entrar</button>
-      </div>
+      {error && <p className="login-error">{error}</p>}
+
+      <button onClick={login}>Entrar</button>
     </div>
-  );
+  </div>
+);
 }
