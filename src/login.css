@@ -1,112 +1,78 @@
-/* Fondo*/
+/* Contenedor general */
 .login-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #1e73be, #2e8b6f);
+  background: #f4f6f8; /* mismo fondo del sistema */
 }
 
-/* Card */
+/* Card principal */
 .login-card {
-  width: 420px;
+  width: 100%;
+  max-width: 900px;
   background: #ffffff;
-  padding: 32px 36px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  animation: fadeIn 0.6s ease;
+  padding: 36px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-/* Título */
+/* Título (igual jerarquía) */
 .login-card h2 {
-  text-align: center;
-  color: #1e73be;
-  margin-bottom: 28px;
   font-size: 26px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 28px;
 }
 
 /* Inputs */
 .login-card input {
   width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 18px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
   border-radius: 6px;
-  border: 1.8px solid #3fa66b;
-  font-size: 15px;
-  outline: none;
+  border: 1.5px solid #90caf9;
+  font-size: 16px;
 }
 
 .login-card input:focus {
-  border-color: #1e73be;
+  outline: none;
+  border-color: #1976d2;
 }
 
-/* Password eye */
-.password-wrapper {
-  position: relative;
-}
-
-.password-wrapper span {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* Botón */
+/* Botón (MISMO estilo verde) */
 .login-card button {
-  width: 100%;
-  padding: 12px;
+  padding: 12px 24px;
   border: none;
   border-radius: 6px;
-  background: #1e73be;
-  color: #ffffff;
+  background: #2e7d32;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
 .login-card button:hover {
-  background: #155a96;
-}
-
-.login-card button:disabled {
-  background: #8bb7e0;
-  cursor: not-allowed;
+  background: #256628;
 }
 
 /* Error */
 .error {
   color: #d32f2f;
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 /* Spinner */
 .spinner {
-  margin: 16px auto 0;
-  width: 26px;
-  height: 26px;
-  border: 3px solid #cfd8dc;
-  border-top: 3px solid #1e73be;
+  margin-top: 16px;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ccc;
+  border-top: 3px solid #1976d2;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
-/* Animaciones */
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
