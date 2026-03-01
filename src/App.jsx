@@ -1,9 +1,14 @@
 import { useState } from "react";
 
 export default function App() {
+  const role = localStorage.getItem("role"); // admin | user | null
+  const isLogged = !!role;
+
   const [view, setView] = useState("inicio");
   const [openMenu, setOpenMenu] = useState(null);
+  const [tipoDocumento, setTipoDocumento] = useState("");
 
+  /* COMPONENTES REUTILIZABLES */
   const MenuTitle = ({ label, menuKey }) => (
     <div
       onClick={() => setOpenMenu(openMenu === menuKey ? null : menuKey)}
@@ -78,6 +83,16 @@ export default function App() {
     </button>
   );
 
+  /* PROTECCIÓN ADMIN */
+  if (isLogged && role !== "admin") {
+    return (
+      <div style={{ padding: 40, fontFamily: "Segoe UI" }}>
+        <h2>No autorizado</h2>
+        <p>Este panel es solo para administradores.</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", fontFamily: "Segoe UI", background: "#f4f6f8" }}>
       {/* HEADER */}
@@ -86,58 +101,80 @@ export default function App() {
           background: "#1976d2",
           color: "#fff",
           padding: "16px 28px",
-          fontWeight: "bold"
+          fontWeight: "bold",
+          display: "flex",
+          justifyContent: "space-between"
         }}
       >
-        SGCM – Sistema de Gestión Citas Medicas
+        SGCM – Sistema de Gestión Citas Médicas
+
+        {isLogged && (
+          <button
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
+            style={{
+              background: "#e53935",
+              border: "none",
+              color: "#fff",
+              padding: "6px 12px",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
+          >
+            Cerrar sesión
+          </button>
+        )}
       </header>
 
       <div style={{ display: "flex" }}>
-        {/* MENU */}
-        <aside
-          style={{
-            width: 300,
-            background: "#ffffff",
-            borderRight: "1px solid #ddd",
-            minHeight: "calc(100vh - 64px)"
-          }}
-        >
-          <MenuItem label="Inicio" target="inicio" />
+        {/* MENÚ PÚBLICO */}
+        {!isLogged && (
+          <aside
+            style={{
+              width: 300,
+              background: "#ffffff",
+              borderRight: "1px solid #ddd",
+              minHeight: "calc(100vh - 64px)"
+            }}
+          >
+            <MenuItem label="Inicio" target="inicio" />
 
-          <MenuTitle label="¿Quiénes Somos?" menuKey="quienes" />
-          {openMenu === "quienes" && (
-            <>
-              <MenuItem label="Historia" target="historia" />
-              <MenuItem label="Misión" target="mision" />
-              <MenuItem label="Visión" target="vision" />
-              <MenuItem label="Política de Calidad" target="politica" />
-              <MenuItem label="Información Institucional" target="info" />
-            </>
-          )}
+            <MenuTitle label="¿Quiénes Somos?" menuKey="quienes" />
+            {openMenu === "quienes" && (
+              <>
+                <MenuItem label="Historia" target="historia" />
+                <MenuItem label="Misión" target="mision" />
+                <MenuItem label="Visión" target="vision" />
+              </>
+            )}
 
-          <MenuTitle label="Novedades" menuKey="novedades" />
-          {openMenu === "novedades" && (
-            <>
-              <MenuItem label="Noticias" target="noticias" />
-              <MenuItem label="Actualizaciones" target="actualizaciones" />
-              <MenuItem label="Boletines" target="boletines" />
-            </>
-          )}
+            <MenuTitle label="Contáctenos" menuKey="contacto" />
+            {openMenu === "contacto" && (
+              <MenuItem label="Formulario de Contacto" target="contacto" />
+            )}
+          </aside>
+        )}
 
-          <MenuTitle label="Soporte" menuKey="soporte" />
-          {openMenu === "soporte" && (
-            <>
-              <MenuItem label="Ayuda" target="ayuda" />
-              <MenuItem label="Preguntas Frecuentes" target="faq" />
-              <MenuItem label="PQR" target="pqr" />
-            </>
-          )}
+        {/* MENÚ ADMIN */}
+        {role === "admin" && (
+          <aside
+            style={{
+              width: 300,
+              background: "#ffffff",
+              borderRight: "1px solid #ddd",
+              minHeight: "calc(100vh - 64px)"
+            }}
+          >
+            <MenuItem label="Inicio" target="inicio" />
 
-          <MenuTitle label="Contáctenos" menuKey="contacto" />
-          {openMenu === "contacto" && (
-            <MenuItem label="Formulario de Contacto" target="contacto" />
-          )}
-        </aside>
+            <MenuTitle label="Pacientes" menuKey="pacientes" />
+            {openMenu === "pacientes" && (
+              <MenuItem label="Registrar Paciente" target="registrarPaciente" />
+            )}
+          </aside>
+        )}
 
         {/* CONTENIDO */}
         <main style={{ flex: 1, padding: 36 }}>
@@ -152,35 +189,77 @@ export default function App() {
             </Card>
           )}
 
-          {view === "historia" && <Card><h2>Historia</h2><p>Contenido histórico.</p></Card>}
-          {view === "mision" && <Card><h2>Misión</h2><p>Nuestra misión institucional.</p></Card>}
-          {view === "vision" && <Card><h2>Visión</h2><p>Nuestra visión institucional.</p></Card>}
-          {view === "politica" && <Card><h2>Política de Calidad</h2><p>Compromiso con la calidad.</p></Card>}
-          {view === "info" && <Card><h2>Información Institucional</h2><p>Datos institucionales.</p></Card>}
-
-          {view === "noticias" && <Card><h2>Noticias</h2></Card>}
-          {view === "actualizaciones" && <Card><h2>Actualizaciones</h2></Card>}
-          {view === "boletines" && <Card><h2>Boletines</h2></Card>}
-
-          {view === "ayuda" && <Card><h2>Ayuda</h2></Card>}
-          {view === "faq" && <Card><h2>Preguntas Frecuentes</h2></Card>}
-
-          {view === "pqr" && (
+          {view === "registrarPaciente" && role === "admin" && (
             <Card>
-              <h2>PQR</h2>
-              <Input placeholder="Asunto" />
-              <Input placeholder="Descripción" />
-              <Button label="Enviar" />
-            </Card>
-          )}
+              <h2 style={{ color: "#1976d2", marginBottom: 20 }}>
+                Registrar Paciente
+              </h2>
 
-          {view === "contacto" && (
-            <Card>
-              <h2>Formulario de Contacto</h2>
-              <Input placeholder="Nombre" />
-              <Input placeholder="Correo" />
-              <Input placeholder="Mensaje" />
-              <Button label="Enviar" />
+              <Input placeholder="Nombres" />
+              <Input placeholder="Apellidos" />
+
+              <select
+                onChange={(e) => setTipoDocumento(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: 10,
+                  marginBottom: 14,
+                  borderRadius: 4,
+                  border: "1px solid #90caf9"
+                }}
+              >
+                <option value="">Tipo de documento</option>
+                <option>Cédula de Ciudadanía</option>
+                <option>Tarjeta de Identidad</option>
+                <option>Cédula de Extranjería</option>
+                <option>Pasaporte</option>
+                <option>Registro Civil</option>
+                <option>No. Único de Identificación Personal</option>
+                <option>Adulto sin Identificación</option>
+                <option>Menor sin Identificación</option>
+                <option>Carnet Diplomático</option>
+                <option>Certificado Nacido Vivo</option>
+                <option>Salvo Conducto</option>
+                <option>Permiso Especial Permanencia</option>
+                <option>Permiso por Protección Temporal</option>
+              </select>
+
+              {tipoDocumento && (
+                <Input type="number" placeholder="Número de documento" />
+              )}
+
+              <Input type="date" />
+              <Input placeholder="Correo Electrónico" />
+              <Input placeholder="Teléfono" />
+              <Input placeholder="Número Celular" />
+              <Input placeholder="Ciudad de Residencia" />
+              <Input placeholder="Localidad" />
+              <Input placeholder="Barrio" />
+              <Input placeholder="Dirección" />
+              <Input placeholder="Contacto de Emergencia" />
+
+              <select
+                style={{
+                  width: "100%",
+                  padding: 10,
+                  marginBottom: 20,
+                  borderRadius: 4,
+                  border: "1px solid #90caf9"
+                }}
+              >
+                <option value="">Parentesco</option>
+                <option>Madre</option>
+                <option>Padre</option>
+                <option>Hermano(a)</option>
+                <option>Esposo(a)</option>
+                <option>Abuelo(a)</option>
+                <option>Tío(a)</option>
+                <option>Primo(a)</option>
+                <option>Sobrino(a)</option>
+                <option>Cuñado(a)</option>
+              </select>
+
+              <Button label="Registrar Paciente" />
             </Card>
           )}
         </main>
