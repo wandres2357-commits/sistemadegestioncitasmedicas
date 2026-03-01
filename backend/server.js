@@ -8,7 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const SECRET = "SGCM_SECRET_KEY";
+const SECRET = process.env.JWT_SECRET || "dev_secret";
+
+app.get("/", (req, res) => {
+  res.send("Backend SGCM funcionando 🚀");
+});
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
@@ -32,6 +36,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.listen(4000, () => {
-  console.log("Backend activo en http://localhost:4000");
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Backend activo en puerto ${PORT}`);
 });
