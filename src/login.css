@@ -1,46 +1,59 @@
-/* Fondo degradado EXACTO */
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
 .login-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #1e73be, #2e8b6f);
+  background: #f4f6f8;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* Card */
+/* =========================
+   CARD (MISMA QUE EL SISTEMA)
+========================= */
 .login-card {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   background: #ffffff;
   padding: 32px 36px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  animation: fadeIn 0.6s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  animation: fadeIn 0.4s ease;
 }
 
-/* Título */
+/* =========================
+   TÍTULO
+========================= */
 .login-card h2 {
-  text-align: center;
-  color: #1e73be;
-  margin-bottom: 28px;
-  font-size: 26px;
+  color: #1976d2;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 26px;
+  text-align: left;
 }
 
-/* Inputs */
+/* =========================
+   INPUTS
+========================= */
 .login-card input {
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 18px;
-  border-radius: 6px;
-  border: 1.8px solid #3fa66b;
+  border-radius: 4px;
+  border: 1.5px solid #90caf9;
   font-size: 15px;
   outline: none;
 }
 
 .login-card input:focus {
-  border-color: #1e73be;
+  border-color: #1976d2;
 }
 
-/* Password eye */
+/* =========================
+   PASSWORD (OJITO)
+========================= */
 .password-wrapper {
   position: relative;
 }
@@ -50,52 +63,60 @@
   right: 12px;
   top: 12px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
+  color: #555;
 }
 
-/* Botón */
+/* =========================
+   BOTÓN (VERDE DEL SISTEMA)
+========================= */
 .login-card button {
   width: 100%;
   padding: 12px;
   border: none;
-  border-radius: 6px;
-  background: #1e73be;
+  border-radius: 4px;
+  background: #2e7d32;
   color: #ffffff;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .login-card button:hover {
-  background: #155a96;
+  background: #256628;
 }
 
 .login-card button:disabled {
-  background: #8bb7e0;
+  background: #a5d6a7;
   cursor: not-allowed;
 }
 
-/* Error */
+/* =========================
+   ERROR
+========================= */
 .error {
   color: #d32f2f;
-  text-align: center;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
-/* Spinner */
+/* =========================
+   SPINNER
+========================= */
 .spinner {
   margin: 16px auto 0;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border: 3px solid #cfd8dc;
-  border-top: 3px solid #1e73be;
+  border-top: 3px solid #1976d2;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
-/* Animaciones */
+/* =========================
+   ANIMACIONES
+========================= */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -103,7 +124,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
