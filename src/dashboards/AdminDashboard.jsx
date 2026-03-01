@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 export default function AdminDashboard() {
@@ -30,8 +31,10 @@ export default function AdminDashboard() {
     />
   );
 
-  const Button = ({ label }) => (
+  // <-- Corregido: propagamos onClick y demás props
+  const Button = ({ label, ...props }) => (
     <button
+      {...props}
       style={{
         padding: "10px 20px",
         border: "none",
@@ -39,7 +42,8 @@ export default function AdminDashboard() {
         background: "#2e7d32",
         color: "#fff",
         fontWeight: "bold",
-        cursor: "pointer"
+        cursor: "pointer",
+        ...(props.style || {})
       }}
     >
       {label}
@@ -53,7 +57,10 @@ export default function AdminDashboard() {
           <h2 style={{ color: "#1976d2" }}>Dashboard Administrador</h2>
           <p>Bienvenido al panel de administración.</p>
 
-          <Button label="Registrar Paciente" onClick={() => setView("registrarPaciente")} />
+          <Button
+            label="Registrar Paciente"
+            onClick={() => setView("registrarPaciente")}
+          />
         </Card>
       )}
 
