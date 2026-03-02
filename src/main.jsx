@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import Login from "./Login";
@@ -7,21 +6,42 @@ import { getSession } from "./auth";
 
 function Root() {
   const [showLogin, setShowLogin] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
-  // Si ya hay sesión activa, cerramos el login de entrada
-  useEffect(() => {
-    const session = getSession();
-    if (session?.token) {
-      setShowLogin(false);
+  // Lee auth desde localStorage/session
+  const readAuth = useCallback(() => {
+    try {
+      const session = getSession();
+      const token = session?.token || localStorage.getItem("token");
+      return !!token;
+    } catch {
+      return !!localStorage.getItem("token");
     }
   }, []);
+
+  // Sincroniza al montar y cuando cambian llaves (auth:updated / storage)
+  useEffect(() => {
+    const sync = () => setIsLogged(readAuth());
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener("auth:updated", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("auth:updated", sync);
+    };
+  }, [readAuth]);
+
+  // Si ya hay sesión activa, asegúrate de cerrar el modal de login
+  useEffect(() => {
+    if (isLogged) setShowLogin(false);
+  }, [isLogged]);
 
   return (
     <>
       <App />
 
-      {/* Botón para abrir el login (solo ejemplo) */}
-      {!showLogin && (
+      {/* Botón para abrir el login: SOLO si NO estás logueado */}
+      {!isLogged && !showLogin && (
         <button
           onClick={() => setShowLogin(true)}
           style={{ position: "fixed", top: 20, right: 20, zIndex: 1000 }}
@@ -31,7 +51,7 @@ function Root() {
       )}
 
       {/* Login como overlay/modal simple */}
-      {showLogin && (
+      {showLogin && !isLogged && (
         <div
           style={{
             position: "fixed",
@@ -62,9 +82,8 @@ function Root() {
 
             <Login
               onSuccess={() => {
-                // saveSession(data) ya guarda token/role y dispara auth:updated
+                // saveSession(data) debe disparar auth:updated
                 window.dispatchEvent(new Event("auth:updated"));
-                // Cerramos el modal; App.jsx hará la redirección a view="admin"
                 setShowLogin(false);
               }}
             />
