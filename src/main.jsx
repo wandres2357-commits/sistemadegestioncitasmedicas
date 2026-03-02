@@ -50,13 +50,12 @@ function Root() {
         </button>
       )}
 
-      {/* Login como overlay/modal simple */}
+      {/* Login como modal CENTRADO, SIN fondo desvanecido detrás */}
       {showLogin && !isLogged && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0,0,0,.35)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

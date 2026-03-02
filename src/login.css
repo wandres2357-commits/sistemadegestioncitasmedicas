@@ -1,26 +1,35 @@
 /* =========================
-   FONDO CON DEGRADADO
+   CONTENEDOR (SIN DEGRADADO)
 ========================= */
 .login-container {
-  min-height: 100vh;
+  /* Antes: background: linear-gradient(90deg, #1976d2, #2e7d32); */
+  background: transparent !important; /* sin fondo degradado */
+  min-height: 0;                      /* si usas modal/overlay, no necesitas 100vh */
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #1976d2, #2e7d32);
+  padding: 0;
   font-family: "Segoe UI", sans-serif;
 }
+
+/* (Opcional) Si quieres que ocupe toda la altura solo cuando lo uses como página completa,
+   cambia min-height a 100vh:
+   min-height: 100vh;
+*/
 
 /* =========================
    CARD
 ========================= */
 .login-card {
-  width: 100%;
-  max-width: 420px;
+  /* Puedes mantener tu tamaño original o el del snippet simplificado */
+  /* width: 100%;
+  max-width: 420px; */
   background: #ffffff;
-  padding: 32px 36px;
+  padding: 32px 36px; /* conservamos tu padding original */
   border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12); /* sombra suavizada */
   animation: fadeIn 0.5s ease;
+  width: 360px; /* tamaño fijo como en el snippet de limpieza */
 }
 
 /* =========================
@@ -69,7 +78,7 @@
 }
 
 /* =========================
-   BOTÓN CENTRADO Y MÁS PEQUEÑO
+   BOTÓN CENTRADO
 ========================= */
 .login-card button {
   display: block;
@@ -133,4 +142,11 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* =========================
+   (Opcional) Ajuste del fondo global
+========================= */
+html, body {
+  background: #f4f6f8; /* consistente con el fondo de tu App */
 }
