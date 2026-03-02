@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import AdminDashboard from "./dashboards/AdminDashboard";
+import AdminShell from "./dashboards/AdminShell"; // << nuevo shell admin
 
 export default function App() {
   const [view, setView] = useState("inicio");
@@ -35,7 +35,6 @@ export default function App() {
       setRole(role);
       setIsLogged(isLogged);
     };
-    // Arranque + listeners
     syncAuth();
     window.addEventListener("storage", syncAuth);
     window.addEventListener("auth:updated", syncAuth);
@@ -45,16 +44,19 @@ export default function App() {
     };
   }, []);
 
-  // Redirección automática al dashboard al entrar como admin
-  useEffect(() => {
-    if (isLogged && isAdmin) {
-      setView("admin");
-    } else {
-      // Si sales y estabas en admin, vuelve a inicio
-      setView((prev) => (prev === "admin" ? "inicio" : prev));
-    }
-  }, [isLogged, isAdmin]);
+  // Si es admin y está logueado, renderiza el SHELL ADMIN y listo.
+  if (isLogged && isAdmin) {
+    const session = (() => {
+      try {
+        return JSON.parse(localStorage.getItem("session"));
+      } catch {
+        return null;
+      }
+    })();
+    return <AdminShell user={session} onLogout={() => setView("inicio")} />;
+  }
 
+  // --- LAYOUT PÚBLICO (TAL CUAL LO TENÍAS) ---
   const MenuTitle = ({ label, menuKey }) => (
     <div
       onClick={() => setOpenMenu(openMenu === menuKey ? null : menuKey)}
@@ -64,7 +66,7 @@ export default function App() {
         cursor: "pointer",
         background: "#e3f2fd",
         color: "#1976d2",
-        borderBottom: "1px solid #bbdefb"
+        borderBottom: "1px solid #bbdefb",
       }}
     >
       {label}
@@ -79,7 +81,7 @@ export default function App() {
         cursor: "pointer",
         background: view === target ? "#1976d2" : "#fff",
         color: view === target ? "#fff" : "#333",
-        borderLeft: view === target ? "4px solid #2e7d32" : "4px solid transparent"
+        borderLeft: view === target ? "4px solid #2e7d32" : "4px solid transparent",
       }}
     >
       {label}
@@ -93,7 +95,7 @@ export default function App() {
         padding: 28,
         borderRadius: 8,
         maxWidth: 900,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
       }}
     >
       {children}
@@ -108,7 +110,7 @@ export default function App() {
         padding: 10,
         marginBottom: 14,
         borderRadius: 4,
-        border: "1px solid #90caf9"
+        border: "1px solid #90caf9",
       }}
     />
   );
@@ -122,7 +124,7 @@ export default function App() {
         background: "#2e7d32",
         color: "#fff",
         fontWeight: "bold",
-        cursor: "pointer"
+        cursor: "pointer",
       }}
     >
       {label}
@@ -137,26 +139,23 @@ export default function App() {
           background: "#1976d2",
           color: "#fff",
           padding: "16px 28px",
-          fontWeight: "bold"
+          fontWeight: "bold",
         }}
       >
         SGCM – Sistema de Gestión Citas Medicas
       </header>
 
       <div style={{ display: "flex" }}>
-        {/* MENU */}
+        {/* MENU PÚBLICO */}
         <aside
           style={{
             width: 300,
             background: "#ffffff",
             borderRight: "1px solid #ddd",
-            minHeight: "calc(100vh - 64px)"
+            minHeight: "calc(100vh - 64px)",
           }}
         >
           <MenuItem label="Inicio" target="inicio" />
-
-          {/* Enlace al Dashboard Admin solo para rol admin/administrador */}
-          {isAdmin && <MenuItem label="Dashboard Admin" target="admin" />}
 
           <MenuTitle label="¿Quiénes Somos?" menuKey="quienes" />
           {openMenu === "quienes" && (
@@ -188,50 +187,76 @@ export default function App() {
           )}
 
           <MenuTitle label="Contáctenos" menuKey="contacto" />
-          {openMenu === "contacto" && (
-            <MenuItem label="Formulario de Contacto" target="contacto" />
-          )}
+          {openMenu === "contacto" && <MenuItem label="Formulario de Contacto" target="contacto" />}
         </aside>
 
-        {/* CONTENIDO */}
+        {/* CONTENIDO PÚBLICO */}
         <main style={{ flex: 1, padding: 36 }}>
-          {/* INICIO PÚBLICO (cuando NO hay sesión) */}
-          {!isLogged && view === "inicio" && (
+          {/* Inicio público */}
+          {view === "inicio" && (
             <Card>
               <h2 style={{ color: "#1976d2" }}>Inicio</h2>
               <p>Contenido público del sistema.</p>
             </Card>
           )}
 
-          {/* DASHBOARD ADMIN */}
-          {isLogged && isAdmin && view === "admin" && (
-            <AdminDashboard />
-          )}
-
-          {/* Inicio original (cuando SÍ hay sesión) */}
-          {isLogged && view === "inicio" && (
+          {view === "historia" && (
             <Card>
-              <h2 style={{ color: "#1976d2" }}>Inicio</h2>
-              <ul style={{ lineHeight: 2 }}>
-                <li>Nosotros</li>
-                <li>Áreas de Trabajo</li>
-                <li>Calidad en el Servicio</li>
-              </ul>
+              <h2>Historia</h2>
+              <p>Contenido histórico.</p>
+            </Card>
+          )}
+          {view === "mision" && (
+            <Card>
+              <h2>Misión</h2>
+              <p>Nuestra misión institucional.</p>
+            </Card>
+          )}
+          {view === "vision" && (
+            <Card>
+              <h2>Visión</h2>
+              <p>Nuestra visión institucional.</p>
+            </Card>
+          )}
+          {view === "politica" && (
+            <Card>
+              <h2>Política de Calidad</h2>
+              <p>Compromiso con la calidad.</p>
+            </Card>
+          )}
+          {view === "info" && (
+            <Card>
+              <h2>Información Institucional</h2>
+              <p>Datos institucionales.</p>
             </Card>
           )}
 
-          {view === "historia" && <Card><h2>Historia</h2><p>Contenido histórico.</p></Card>}
-          {view === "mision" && <Card><h2>Misión</h2><p>Nuestra misión institucional.</p></Card>}
-          {view === "vision" && <Card><h2>Visión</h2><p>Nuestra visión institucional.</p></Card>}
-          {view === "politica" && <Card><h2>Política de Calidad</h2><p>Compromiso con la calidad.</p></Card>}
-          {view === "info" && <Card><h2>Información Institucional</h2><p>Datos institucionales.</p></Card>}
+          {view === "noticias" && (
+            <Card>
+              <h2>Noticias</h2>
+            </Card>
+          )}
+          {view === "actualizaciones" && (
+            <Card>
+              <h2>Actualizaciones</h2>
+            </Card>
+          )}
+          {view === "boletines" && (
+            <Card>
+              <h2>Boletines</h2>
+            </Card>
+          )}
 
-          {view === "noticias" && <Card><h2>Noticias</h2></Card>}
-          {view === "actualizaciones" && <Card><h2>Actualizaciones</h2></Card>}
-          {view === "boletines" && <Card><h2>Boletines</h2></Card>}
-
-          {view === "ayuda" && <Card><h2>Ayuda</h2></Card>}
-          {view === "faq" && <Card><h2>Preguntas Frecuentes</h2></Card>}
+          {view === "ayuda" && (
+            <Card>
+              <h2>Ayuda</h2>
+            </Card>
+          )}
+          {view === "faq" && (
+            <Card>
+              <h2>Preguntas Frecuentes</h2>
+            </Card>
+          )}
 
           {view === "pqr" && (
             <Card>

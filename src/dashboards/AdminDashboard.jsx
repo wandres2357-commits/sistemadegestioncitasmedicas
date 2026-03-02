@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 export default function AdminDashboard() {
@@ -11,7 +10,7 @@ export default function AdminDashboard() {
         padding: 28,
         borderRadius: 8,
         maxWidth: 900,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
       }}
     >
       {children}
@@ -26,7 +25,7 @@ export default function AdminDashboard() {
         padding: 10,
         marginBottom: 14,
         borderRadius: 4,
-        border: "1px solid #90caf9"
+        border: "1px solid #90caf9",
       }}
     />
   );
@@ -43,7 +42,7 @@ export default function AdminDashboard() {
         color: "#fff",
         fontWeight: "bold",
         cursor: "pointer",
-        ...(props.style || {})
+        ...(props.style || {}),
       }}
     >
       {label}
@@ -57,10 +56,7 @@ export default function AdminDashboard() {
           <h2 style={{ color: "#1976d2" }}>Dashboard Administrador</h2>
           <p>Bienvenido al panel de administración.</p>
 
-          <Button
-            label="Registrar Paciente"
-            onClick={() => setView("registrarPaciente")}
-          />
+          <Button label="Registrar Paciente" onClick={() => setView("registrarPaciente")} />
         </Card>
       )}
 
