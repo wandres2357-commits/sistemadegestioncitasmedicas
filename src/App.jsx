@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import AdminDashboard from "./dashboards/AdminDashboard";
 
@@ -5,42 +6,52 @@ export default function App() {
   const [view, setView] = useState("inicio");
   const [openMenu, setOpenMenu] = useState(null);
 
-  // Estado de autenticación/rol desde localStorage, con inicialización segura
-  const [role, setRole] = useState(() => localStorage.getItem("role"));
-  const [isLogged, setIsLogged] = useState(() => !!localStorage.getItem("token"));
+  // Lee valores iniciales desde localStorage (token/role o desde session como respaldo)
+  const readAuth = () => {
+    let role = localStorage.getItem("role");
+    let token = localStorage.getItem("token");
+    if (!role || !token) {
+      try {
+        const session = JSON.parse(localStorage.getItem("session"));
+        if (session) {
+          role = role || (session.role ? String(session.role).toLowerCase() : null);
+          token = token || session.token;
+        }
+      } catch {}
+    }
+    return { role, isLogged: !!token };
+  };
 
-  // Unificación de roles: "admin" y "administrador"
+  const init = readAuth();
+  const [role, setRole] = useState(init.role);
+  const [isLogged, setIsLogged] = useState(init.isLogged);
+
+  // Unificación de rol admin/administrador
   const isAdmin = role === "admin" || role === "administrador";
 
-  // Mantener sincronizado con cambios en localStorage (y opción de evento custom)
+  // Sincronizar con cambios en localStorage (login/logout)
   useEffect(() => {
-    const syncAuthFromLocalStorage = () => {
-      setRole(localStorage.getItem("role"));
-      setIsLogged(!!localStorage.getItem("token"));
+    const syncAuth = () => {
+      const { role, isLogged } = readAuth();
+      setRole(role);
+      setIsLogged(isLogged);
     };
-
-    // Sync inicial
-    syncAuthFromLocalStorage();
-
-    // Cambios desde otras pestañas/ventanas
-    window.addEventListener("storage", syncAuthFromLocalStorage);
-
-    // (Opcional) Si tu flujo de login despacha un evento personalizado:
-    // window.dispatchEvent(new Event("auth:updated"));
-    window.addEventListener("auth:updated", syncAuthFromLocalStorage);
-
+    // Arranque + listeners
+    syncAuth();
+    window.addEventListener("storage", syncAuth);
+    window.addEventListener("auth:updated", syncAuth);
     return () => {
-      window.removeEventListener("storage", syncAuthFromLocalStorage);
-      window.removeEventListener("auth:updated", syncAuthFromLocalStorage);
+      window.removeEventListener("storage", syncAuth);
+      window.removeEventListener("auth:updated", syncAuth);
     };
   }, []);
 
   // Redirección automática al dashboard al entrar como admin
   useEffect(() => {
     if (isLogged && isAdmin) {
-      setView((prev) => (prev === "admin" ? prev : "admin"));
+      setView("admin");
     } else {
-      // Si sales de sesión y estabas en el dashboard, regresa a inicio
+      // Si sales y estabas en admin, vuelve a inicio
       setView((prev) => (prev === "admin" ? "inicio" : prev));
     }
   }, [isLogged, isAdmin]);

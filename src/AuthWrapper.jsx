@@ -1,66 +1,40 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import App from "./App";
+import Login from "./Login";
 
 export default function AuthWrapper() {
-  const [user, setUser] = useState(null);
+  const [ready, setReady] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
 
-  const login = (role) => {
-    setUser({ role });
+  const sync = () => {
+    const token = localStorage.getItem("token") ||
+                  (JSON.parse(localStorage.getItem("session") || "null")?.token);
+    setHasSession(!!token);
+    setReady(true);
   };
 
-  if (!user) {
+  useEffect(() => {
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener("auth:updated", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("auth:updated", sync);
+    };
+  }, []);
+
+  if (!ready) return null;
+
+  if (!hasSession) {
     return (
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#f4f6f8",
-        fontFamily: "Segoe UI"
-      }}>
-        <div style={{
-          background: "#fff",
-          padding: 32,
-          borderRadius: 8,
-          width: 320,
-          boxShadow: "0 4px 12px rgba(0,0,0,.15)"
-        }}>
-          <h2 style={{ textAlign: "center", color: "#1976d2" }}>
-            Iniciar Sesión
-          </h2>
-
-          <button
-            onClick={() => login("user")}
-            style={{
-              width: "100%",
-              padding: 12,
-              marginBottom: 12,
-              background: "#1976d2",
-              color: "#fff",
-              border: "none",
-              borderRadius: 4,
-              cursor: "pointer"
-            }}
-          >
-            Entrar como Usuario
-          </button>
-
-          <button
-            onClick={() => login("admin")}
-            style={{
-              width: "100%",
-              padding: 12,
-              background: "#2e7d32",
-              color: "#fff",
-              border: "none",
-              borderRadius: 4,
-              cursor: "pointer"
-            }}
-          >
-            Entrar como Administrador
-          </button>
-        </div>
-      </div>
+      <Login
+        onSuccess={() => {
+          // NO redirigir por URL
+          // App.jsx ya hará setView("admin") con su useEffect
+          window.dispatchEvent(new Event("auth:updated"));
+        }}
+      />
     );
   }
 
