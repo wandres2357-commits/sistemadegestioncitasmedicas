@@ -2,7 +2,8 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
 import AdminShell from "./dashboards/AdminShell";
-import "./App.css"; // <= importa tus estilos
+import FooterSitemap from "./FooterSitemap";
+import "./App.css";
 
 export default function App() {
   const [view, setView] = useState("inicio");
@@ -26,7 +27,6 @@ export default function App() {
   const init = readAuth();
   const [role, setRole] = useState(init.role);
   const [isLogged, setIsLogged] = useState(init.isLogged);
-
   const isAdmin = role === "admin" || role === "administrador";
 
   useEffect(() => {
@@ -56,6 +56,60 @@ export default function App() {
     return <AdminShell user={session} onLogout={() => setView("inicio")} />;
   }
 
+  // --- DATA DEL MAPA DEL SITIO (VA DENTRO DEL COMPONENTE) ---
+  const sitemapItems = [
+    {
+      title: "Inicio",
+      key: "inicio",
+      links: [{ label: "Ir a Inicio", view: "inicio" }],
+    },
+    {
+      title: "¿Quiénes Somos?",
+      key: "quienes",
+      links: [
+        { label: "Historia", view: "historia" },
+        { label: "Misión", view: "mision" },
+        { label: "Visión", view: "vision" },
+        { label: "Política de Calidad", view: "politica" },
+        { label: "Información Institucional", view: "info" },
+      ],
+    },
+    {
+      title: "Novedades",
+      key: "novedades",
+      links: [
+        { label: "Noticias", view: "noticias" },
+        { label: "Actualizaciones", view: "actualizaciones" },
+        { label: "Boletines", view: "boletines" },
+      ],
+    },
+    {
+      title: "Soporte",
+      key: "soporte",
+      links: [
+        { label: "Ayuda", view: "ayuda" },
+        { label: "Preguntas Frecuentes", view: "faq" },
+        { label: "PQR", view: "pqr" },
+      ],
+    },
+    {
+      title: "Contáctenos",
+      key: "contacto",
+      links: [{ label: "Formulario de Contacto", view: "contacto" }],
+    },
+  ];
+
+  // --- NAVEGACIÓN DESDE EL FOOTER + SCROLL SUAVE ---
+  const handleNavigate = (viewKey) => {
+    setView(viewKey);
+    requestAnimationFrame(() => {
+      const mainEl = document.querySelector("main");
+      if (mainEl) {
+        mainEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  };
+
   // --- COMPONENTES BASE ---
   const Card = ({ children }) => <div className="card">{children}</div>;
   const Input = (props) => <input {...props} className="input" />;
@@ -68,7 +122,6 @@ export default function App() {
         <div className="topbar-inner">
           {/* LOGO + Marca */}
           <div className="brand" aria-label="SGCM">
-            {/* SVG (puedes reemplazar por tu imagen) */}
             <svg className="logo" viewBox="0 0 48 48" aria-hidden="true">
               <defs>
                 <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
@@ -89,7 +142,6 @@ export default function App() {
 
           {/* MENÚ CENTRADO */}
           <ul className="menu" role="menubar" aria-label="Navegación principal">
-            {/* Opción directa */}
             <li className="nav-item" role="none">
               <button
                 className={`link ${view === "inicio" ? "active" : ""}`}
@@ -100,7 +152,6 @@ export default function App() {
               </button>
             </li>
 
-            {/* ¿Quiénes somos? */}
             <li className="nav-item" role="none">
               <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                 ¿Quiénes Somos?
@@ -114,7 +165,6 @@ export default function App() {
               </div>
             </li>
 
-            {/* Novedades */}
             <li className="nav-item" role="none">
               <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                 Novedades
@@ -126,7 +176,6 @@ export default function App() {
               </div>
             </li>
 
-            {/* Soporte */}
             <li className="nav-item" role="none">
               <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                 Soporte
@@ -138,7 +187,6 @@ export default function App() {
               </div>
             </li>
 
-            {/* Contáctenos */}
             <li className="nav-item" role="none">
               <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                 Contáctenos
@@ -155,7 +203,7 @@ export default function App() {
             <button
               className="cta"
               onClick={() => window.dispatchEvent(new Event("auth:open"))}
-              title="Abrir inicio de sesión (placeholder)"
+              title="Abrir inicio de sesión"
             >
               Iniciar sesión
             </button>
@@ -249,7 +297,9 @@ export default function App() {
           </Card>
         )}
       </main>
+
+      {/* ======= FOOTER (MAPA DEL SITIO) ======= */}
+      <FooterSitemap items={sitemapItems} onNavigate={handleNavigate} />
     </div>
   );
 }
-``
