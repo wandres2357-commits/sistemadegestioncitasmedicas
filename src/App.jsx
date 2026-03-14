@@ -2,7 +2,7 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
 import AdminShell from "./dashboards/AdminShell";
-import FooterSitemap from "./FooterSitemap";
+import FooterSitemapSingle from "./FooterSitemapSingle";
 import "./App.css";
 
 export default function App() {
@@ -56,7 +56,7 @@ export default function App() {
     return <AdminShell user={session} onLogout={() => setView("inicio")} />;
   }
 
-  // --- DATA DEL MAPA DEL SITIO (VA DENTRO DEL COMPONENTE) ---
+  // --- DATA DEL MAPA DEL SITIO ---
   const sitemapItems = [
     {
       title: "Inicio",
@@ -298,8 +298,8 @@ export default function App() {
         )}
       </main>
 
-      {/* ======= FOOTER (MAPA DEL SITIO) ======= */}
-      <FooterSitemap items={sitemapItems} onNavigate={handleNavigate} />
+      {/* ======= FOOTER (MAPA DEL SITIO EN UNA SOLA LISTA) ======= */}
+      <FooterSitemapSingle items={sitemapItems} onNavigate={handleNavigate} />
     </div>
   );
 }
