@@ -242,30 +242,15 @@ export default function App() {
          }}>
             <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
             <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>📜</span>
-            <h2 style={{ margin: 0 }}>Historia del SGCM</h2>
+            <h2 style={{ margin: 0 }}>Historia.</h2>
             </div>
 
           <p style={{ lineHeight: "1.6", marginBottom: "12px", textAlign: "justify", color: "#444" }}>
-    El <strong>SGCM (Sistema de Gestión de Citas Médicas)</strong> surge como una
-    solución tecnológica orientada a mejorar la organización y administración
-    de las citas dentro de los servicios de salud. Tradicionalmente, la
-    programación de citas médicas se realizaba de forma manual mediante agendas
-    físicas o registros en papel, lo que generaba dificultades como pérdida de
-    información, duplicidad de citas y largos tiempos de espera.
-  </p>
-
-  <p style={{ lineHeight: "1.6", marginBottom: "12px", textAlign: "justify", color: "#444" }}>
-    Con el avance de las tecnologías de la información, se desarrolló el SGCM
-    como una herramienta digital que permite automatizar la programación,
-    consulta y control de las citas médicas, facilitando la interacción entre
-    pacientes, personal administrativo y profesionales de la salud.
-  </p>
-
-  <p style={{ lineHeight: "1.6", textAlign: "justify", color: "#444" }}>
-    Actualmente, el sistema permite registrar pacientes, programar y cancelar
-    citas, consultar disponibilidad de horarios y mantener un control eficiente
-    de la información médica, contribuyendo a una atención más organizada,
-    rápida y eficiente.
+    El <strong>SGCM (Sistema de Gestión de Citas Médicas)</strong> es una herramienta tecnológica creada
+    para mejorar la organización y administración de las citas en los servicios de salud. Surge como 
+    una alternativa a los métodos manuales, permitiendo automatizar la programación, consulta y control
+    de citas médicas. Además, facilita la interacción entre pacientes, personal administrativo y profesionales
+    de la salud, contribuyendo a una atención más organizada, rápida y eficiente.
   </p>
 </Card>
         )}
