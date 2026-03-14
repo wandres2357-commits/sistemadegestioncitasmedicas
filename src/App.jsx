@@ -212,11 +212,23 @@ export default function App() {
 
       {/* ======= CONTENIDO ======= */}
       <main>
-        {view === "inicio" && (
-          <Card>
-            <h2>Inicio</h2>
-            <p>Contenido público del sistema.</p>
-          </Card>
+      {view === "inicio" && (
+           <Card>
+             <h2>Inicio</h2>
+    
+             <p style={{ fontSize: "1.4rem", fontWeight: "bold", marginBottom: "8px" }}>
+              Bienvenido a nuestro sistema de citas
+             </p>
+
+             <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: "1.5" }}>
+              El SGCM (Sistema de Gestión de Citas Médicas) es una plataforma diseñada 
+              para facilitar la programación, consulta y administración de citas entre 
+              pacientes y personal médico. Su objetivo es optimizar los procesos de 
+              atención, mejorar la organización de las agendas médicas y brindar una 
+              experiencia más eficiente para los usuarios.
+              </p>
+
+            </Card>
         )}
 
         {view === "historia" && (
