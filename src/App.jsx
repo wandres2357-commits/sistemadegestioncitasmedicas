@@ -232,10 +232,42 @@ export default function App() {
         )}
 
         {view === "historia" && (
-          <Card>
-            <h2>Historia</h2>
-            <p>Contenido histórico.</p>
-          </Card>
+            <Card
+             style={{
+             padding: "20px",
+             borderRadius: "12px",
+             boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+             borderLeft: "6px solid #2b7cff",
+             backgroundColor: "#ffffff"
+         }}>
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
+            <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>📜</span>
+            <h2 style={{ margin: 0 }}>Historia del SGCM</h2>
+            </div>
+
+          <p style={{ lineHeight: "1.6", marginBottom: "12px", textAlign: "justify", color: "#444" }}>
+    El <strong>SGCM (Sistema de Gestión de Citas Médicas)</strong> surge como una
+    solución tecnológica orientada a mejorar la organización y administración
+    de las citas dentro de los servicios de salud. Tradicionalmente, la
+    programación de citas médicas se realizaba de forma manual mediante agendas
+    físicas o registros en papel, lo que generaba dificultades como pérdida de
+    información, duplicidad de citas y largos tiempos de espera.
+  </p>
+
+  <p style={{ lineHeight: "1.6", marginBottom: "12px", textAlign: "justify", color: "#444" }}>
+    Con el avance de las tecnologías de la información, se desarrolló el SGCM
+    como una herramienta digital que permite automatizar la programación,
+    consulta y control de las citas médicas, facilitando la interacción entre
+    pacientes, personal administrativo y profesionales de la salud.
+  </p>
+
+  <p style={{ lineHeight: "1.6", textAlign: "justify", color: "#444" }}>
+    Actualmente, el sistema permite registrar pacientes, programar y cancelar
+    citas, consultar disponibilidad de horarios y mantener un control eficiente
+    de la información médica, contribuyendo a una atención más organizada,
+    rápida y eficiente.
+  </p>
+</Card>
         )}
         {view === "mision" && (
           <Card>
