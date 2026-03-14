@@ -151,88 +151,91 @@ export default function App() {
 
       {/* NAVBAR */}
       <nav
-        style={{
-          display: "flex",
-          gap: 30,
-          padding: "10px 28px",
-          background: "#fff",
-          borderBottom: "1px solid #ddd"
-        }}
-      >
+  style={{
+    display: "flex",
+    gap: 30,
+    padding: "10px 28px",
+    background: "#fff",
+    borderBottom: "1px solid #ddd"
+  }}
+>
 
-        <div style={{ fontWeight: "bold", cursor: "pointer" }} onClick={() => setView("inicio")}>
-          Inicio
-        </div>
+  <div
+    style={{ fontWeight: "bold", cursor: "pointer" }}
+    onClick={() => setView("inicio")}
+  >
+    Inicio
+  </div>
 
-        {/* QUIENES SOMOS */}
-        <div
-          onMouseEnter={() => setOpenMenu("quienes")}
-          onMouseLeave={() => setOpenMenu(null)}
-          style={{ position: "relative", cursor: "pointer", fontWeight: "bold" }}
-        >
-          ¿Quiénes Somos?
+  {/* QUIENES SOMOS */}
+  <div
+    style={{ position: "relative", fontWeight: "bold" }}
+    onMouseEnter={() => setOpenMenu("quienes")}
+    onMouseLeave={() => setOpenMenu(null)}
+  >
+    <span style={{ cursor: "pointer" }}>¿Quiénes Somos?</span>
 
-          {openMenu === "quienes" && (
-            <div style={dropdownStyle}>
-              <MenuItem label="Historia" target="historia" />
-              <MenuItem label="Misión" target="mision" />
-              <MenuItem label="Visión" target="vision" />
-              <MenuItem label="Política de Calidad" target="politica" />
-              <MenuItem label="Información Institucional" target="info" />
-            </div>
-          )}
-        </div>
+    {openMenu === "quienes" && (
+      <div style={dropdownStyle}>
+        <MenuItem label="Historia" target="historia" />
+        <MenuItem label="Misión" target="mision" />
+        <MenuItem label="Visión" target="vision" />
+        <MenuItem label="Política de Calidad" target="politica" />
+        <MenuItem label="Información Institucional" target="info" />
+      </div>
+    )}
+  </div>
 
-        {/* NOVEDADES */}
-        <div
-          onMouseEnter={() => setOpenMenu("novedades")}
-          onMouseLeave={() => setOpenMenu(null)}
-          style={{ position: "relative", cursor: "pointer", fontWeight: "bold" }}
-        >
-          Novedades
+  {/* NOVEDADES */}
+  <div
+    style={{ position: "relative", fontWeight: "bold" }}
+    onMouseEnter={() => setOpenMenu("novedades")}
+    onMouseLeave={() => setOpenMenu(null)}
+  >
+    <span style={{ cursor: "pointer" }}>Novedades</span>
 
-          {openMenu === "novedades" && (
-            <div style={dropdownStyle}>
-              <MenuItem label="Noticias" target="noticias" />
-              <MenuItem label="Actualizaciones" target="actualizaciones" />
-              <MenuItem label="Boletines" target="boletines" />
-            </div>
-          )}
-        </div>
+    {openMenu === "novedades" && (
+      <div style={dropdownStyle}>
+        <MenuItem label="Noticias" target="noticias" />
+        <MenuItem label="Actualizaciones" target="actualizaciones" />
+        <MenuItem label="Boletines" target="boletines" />
+      </div>
+    )}
+  </div>
 
-        {/* SOPORTE */}
-        <div
-          onMouseEnter={() => setOpenMenu("soporte")}
-          onMouseLeave={() => setOpenMenu(null)}
-          style={{ position: "relative", cursor: "pointer", fontWeight: "bold" }}
-        >
-          Soporte
+  {/* SOPORTE */}
+  <div
+    style={{ position: "relative", fontWeight: "bold" }}
+    onMouseEnter={() => setOpenMenu("soporte")}
+    onMouseLeave={() => setOpenMenu(null)}
+  >
+    <span style={{ cursor: "pointer" }}>Soporte</span>
 
-          {openMenu === "soporte" && (
-            <div style={dropdownStyle}>
-              <MenuItem label="Ayuda" target="ayuda" />
-              <MenuItem label="Preguntas Frecuentes" target="faq" />
-              <MenuItem label="PQR" target="pqr" />
-            </div>
-          )}
-        </div>
+    {openMenu === "soporte" && (
+      <div style={dropdownStyle}>
+        <MenuItem label="Ayuda" target="ayuda" />
+        <MenuItem label="Preguntas Frecuentes" target="faq" />
+        <MenuItem label="PQR" target="pqr" />
+      </div>
+    )}
+  </div>
 
-        {/* CONTACTO */}
-        <div
-          onMouseEnter={() => setOpenMenu("contacto")}
-          onMouseLeave={() => setOpenMenu(null)}
-          style={{ position: "relative", cursor: "pointer", fontWeight: "bold" }}
-        >
-          Contáctenos
+  {/* CONTACTO */}
+  <div
+    style={{ position: "relative", fontWeight: "bold" }}
+    onMouseEnter={() => setOpenMenu("contacto")}
+    onMouseLeave={() => setOpenMenu(null)}
+  >
+    <span style={{ cursor: "pointer" }}>Contáctenos</span>
 
-          {openMenu === "contacto" && (
-            <div style={dropdownStyle}>
-              <MenuItem label="Formulario de Contacto" target="contacto" />
-            </div>
-          )}
-        </div>
+    {openMenu === "contacto" && (
+      <div style={dropdownStyle}>
+        <MenuItem label="Formulario de Contacto" target="contacto" />
+      </div>
+    )}
+  </div>
 
-      </nav>
+</nav>
 
       {/* CONTENIDO */}
       <main style={{ padding: 36 }}>
@@ -289,5 +292,6 @@ const dropdownStyle = {
   background: "#fff",
   border: "1px solid #ddd",
   boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-  minWidth: 220
+  minWidth: 220,
+  zIndex: 999
 };
