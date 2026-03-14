@@ -1,6 +1,4 @@
-// Dashboard.jsx (ya no se usa en Opción A)
-// Lo dejamos como stub por compatibilidad.
-
+// src/Dashboard.jsx (opcional si aún se usa)
 import AdminDashboard from "./dashboards/AdminDashboard";
 
 export default function Dashboard() {
