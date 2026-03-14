@@ -1,3 +1,4 @@
+// src/App.jsx
 import { useState, useEffect } from "react";
 import AdminShell from "./dashboards/AdminShell";
 import FooterSitemapSingle from "./FooterSitemapSingle";
@@ -25,10 +26,8 @@ export default function App() {
   };
 
   const init = readAuth();
-
   const [role, setRole] = useState(init.role);
   const [isLogged, setIsLogged] = useState(init.isLogged);
-
   const isAdmin = role === "admin" || role === "administrador";
 
   useEffect(() => {
@@ -112,19 +111,14 @@ export default function App() {
     requestAnimationFrame(() => {
       const mainEl = document.querySelector("main");
       if (mainEl) {
-        mainEl.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+        mainEl.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
   };
 
   // --- COMPONENTES BASE ---
   const Card = ({ children }) => <div className="card">{children}</div>;
-
   const Input = (props) => <input {...props} className="input" />;
-
   const Button = ({ label }) => <button className="btn">{label}</button>;
 
   return (
@@ -133,9 +127,9 @@ export default function App() {
       <header className="topbar" role="banner">
         <div className="topbar-inner">
 
-          {/* LOGO */}
+          {/* LOGO + Marca */}
           <div className="brand" aria-label="SGCM">
-            <svg className="logo" viewBox="0 0 48 48">
+            <svg className="logo" viewBox="0 0 48 48" aria-hidden="true">
               <defs>
                 <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
                   <stop offset="0" stopColor="#1976d2" />
@@ -152,29 +146,88 @@ export default function App() {
               <div className="brand-title">
                 SGCM – Sistema de Gestión de Citas Médicas
               </div>
-              <div className="brand-sub">Salud • Calidad • Confianza</div>
+              <div className="brand-sub">
+                Salud • Calidad • Confianza
+              </div>
             </div>
           </div>
 
-          {/* MENÚ */}
-          <ul className="menu">
-            <li className="nav-item">
+          {/* MENÚ CENTRADO */}
+          <ul className="menu" role="menubar" aria-label="Navegación principal">
+
+            <li className="nav-item" role="none">
               <button
                 className={`link ${view === "inicio" ? "active" : ""}`}
                 onClick={() => setView("inicio")}
+                role="menuitem"
               >
                 Inicio
               </button>
             </li>
+
+            <li className="nav-item" role="none">
+              <button
+                className="link"
+                role="menuitem"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                ¿Quiénes Somos?
+              </button>
+
+              <div className="dropdown" role="menu" aria-label="¿Quiénes Somos?">
+                <button className={`menu-btn ${view === "historia" ? "active" : ""}`} onClick={() => setView("historia")}>Historia</button>
+                <button className={`menu-btn ${view === "mision" ? "active" : ""}`} onClick={() => setView("mision")}>Misión</button>
+                <button className={`menu-btn ${view === "vision" ? "active" : ""}`} onClick={() => setView("vision")}>Visión</button>
+                <button className={`menu-btn ${view === "politica" ? "active" : ""}`} onClick={() => setView("politica")}>Política de Calidad</button>
+                <button className={`menu-btn ${view === "info" ? "active" : ""}`} onClick={() => setView("info")}>Información Institucional</button>
+              </div>
+            </li>
+
+            <li className="nav-item" role="none">
+              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                Novedades
+              </button>
+
+              <div className="dropdown" role="menu" aria-label="Novedades">
+                <button className={`menu-btn ${view === "noticias" ? "active" : ""}`} onClick={() => setView("noticias")}>Noticias</button>
+                <button className={`menu-btn ${view === "actualizaciones" ? "active" : ""}`} onClick={() => setView("actualizaciones")}>Actualizaciones</button>
+                <button className={`menu-btn ${view === "boletines" ? "active" : ""}`} onClick={() => setView("boletines")}>Boletines</button>
+              </div>
+            </li>
+
+            <li className="nav-item" role="none">
+              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                Soporte
+              </button>
+
+              <div className="dropdown" role="menu" aria-label="Soporte">
+                <button className={`menu-btn ${view === "ayuda" ? "active" : ""}`} onClick={() => setView("ayuda")}>Ayuda</button>
+                <button className={`menu-btn ${view === "faq" ? "active" : ""}`} onClick={() => setView("faq")}>Preguntas Frecuentes</button>
+                <button className={`menu-btn ${view === "pqr" ? "active" : ""}`} onClick={() => setView("pqr")}>PQR</button>
+              </div>
+            </li>
+
+            <li className="nav-item" role="none">
+              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                Contáctenos
+              </button>
+
+              <div className="dropdown" role="menu" aria-label="Contáctenos">
+                <button className={`menu-btn ${view === "contacto" ? "active" : ""}`} onClick={() => setView("contacto")}>Formulario de Contacto</button>
+              </div>
+            </li>
+
           </ul>
 
-          {/* ACCIONES DERECHA */}
+          {/* Acciones derecha */}
           <div className="right">
             <span className="badge">Público</span>
 
             <button
               className="cta"
               onClick={() => window.dispatchEvent(new Event("auth:open"))}
+              title="Abrir inicio de sesión"
             >
               Iniciar sesión
             </button>
@@ -183,58 +236,121 @@ export default function App() {
         </div>
       </header>
 
-      {/* ===== CONTENIDO ===== */}
+      {/* ======= CONTENIDO ======= */}
       <main>
 
         {view === "inicio" && (
           <Card>
             <h2>Inicio</h2>
 
-            <p
-              style={{
-                fontSize: "1.4rem",
-                fontWeight: "bold",
-                marginBottom: "8px",
-              }}
-            >
+            <p style={{ fontSize: "1.4rem", fontWeight: "bold", marginBottom: "8px" }}>
               Bienvenido a nuestro sistema de citas
             </p>
 
-            <p
-              style={{
-                fontSize: "0.95rem",
-                color: "#555",
-                lineHeight: "1.5",
-              }}
-            >
-              El SGCM (Sistema de Gestión de Citas Médicas) es una plataforma
-              diseñada para facilitar la programación, consulta y administración
-              de citas entre pacientes y personal médico.
+            <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: "1.5" }}>
+              El SGCM (Sistema de Gestión de Citas Médicas) es una plataforma diseñada
+              para facilitar la programación, consulta y administración de citas entre
+              pacientes y personal médico. Su objetivo es optimizar los procesos de
+              atención, mejorar la organización de las agendas médicas y brindar una
+              experiencia más eficiente para los usuarios.
             </p>
           </Card>
         )}
 
         {view === "historia" && (
-          <Card>
-            <h2>Historia</h2>
-            <p>
-              En el año 2025 SGCM se desarrolla como una herramienta tecnológica
-              para mejorar la organización y administración de las citas médicas.
+          <Card
+            style={{
+              padding: "20px",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              borderLeft: "6px solid #2b7cff",
+              backgroundColor: "#ffffff"
+            }}
+          >
+
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>📜</span>
+              <h2 style={{ margin: 0 }}>Historia.</h2>
+            </div>
+
+            <p style={{ lineHeight: "1.6", marginBottom: "12px", textAlign: "justify", color: "#444" }}>
+              En el año 2025 <strong>SGCM (Sistema de Gestión de Citas Médicas)</strong> se desarrolla como una herramienta
+              tecnológica de sistema de Información para mejorar la organización y administración de las citas en los servicios
+              de salud. Surge como una alternativa a los métodos manuales, permitiendo automatizar la programación, consulta y control
+              de citas médicas. Además, facilita la interacción entre pacientes, personal administrativo y profesionales de la salud,
+              contribuyendo a una atención más organizada, rápida y eficiente.
             </p>
+
           </Card>
         )}
 
         {view === "mision" && (
-          <Card>
-            <h2>Misión</h2>
-            <p>Brindar una plataforma tecnológica eficiente para la gestión de citas.</p>
+          <Card
+            style={{
+              padding: "20px",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              borderLeft: "6px solid #28a745",
+              backgroundColor: "#ffffff"
+            }}
+          >
+
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>🎯</span>
+              <h2 style={{ margin: 0 }}>Misión</h2>
+            </div>
+
+            <p
+              style={{
+                lineHeight: "1.6",
+                textAlign: "justify",
+                color: "#444",
+                fontSize: "0.95rem"
+              }}
+            >
+              Brindar una <strong>plataforma tecnológica eficiente</strong> que permita
+              gestionar de manera organizada y ágil la programación de
+              <strong> citas médicas</strong>, facilitando la interacción entre
+              pacientes, personal administrativo y profesionales de la salud. El sistema
+              busca <strong>mejorar la calidad del servicio</strong>, optimizar los
+              tiempos de atención y garantizar una adecuada administración de la
+              información.
+            </p>
+
           </Card>
         )}
 
         {view === "vision" && (
-          <Card>
-            <h2>Visión</h2>
-            <p>Ser un sistema de referencia en la gestión digital de citas médicas.</p>
+          <Card
+            style={{
+              padding: "20px",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              borderLeft: "6px solid #6f42c1",
+              backgroundColor: "#ffffff"
+            }}
+          >
+
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>👁️</span>
+              <h2 style={{ margin: 0 }}>Visión</h2>
+            </div>
+
+            <p
+              style={{
+                lineHeight: "1.6",
+                textAlign: "justify",
+                color: "#444",
+                fontSize: "0.95rem"
+              }}
+            >
+              Ser un <strong>sistema de referencia en la gestión digital de citas médicas</strong>,
+              reconocido por su eficiencia, confiabilidad y facilidad de uso. El SGCM busca
+              contribuir a la <strong>modernización de los servicios de salud</strong> y a la
+              mejora continua en la atención de los pacientes mediante el uso de
+              <strong> tecnologías de información</strong>.
+            </p>
+
           </Card>
         )}
 
@@ -303,11 +419,9 @@ export default function App() {
 
       </main>
 
-      {/* FOOTER */}
-      <FooterSitemapSingle
-        items={sitemapItems}
-        onNavigate={handleNavigate}
-      />
+      {/* ======= FOOTER ======= */}
+      <FooterSitemapSingle items={sitemapItems} onNavigate={handleNavigate} />
+
     </div>
   );
 }
