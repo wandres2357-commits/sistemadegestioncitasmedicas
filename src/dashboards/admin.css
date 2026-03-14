@@ -1,4 +1,3 @@
-
 /* ===========================
    ADMIN L&F (alineado con App.css)
    Paleta, tipografía, sombras y animaciones consistentes
@@ -212,17 +211,86 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ======= RESPONSIVE ======= */
+/* ======= RESPONSIVE (Desktop/Tablet) ======= */
 @media (max-width: 960px) {
   .admin-layout { grid-template-columns: 220px 1fr; }
 }
+
+/* =========================
+   MÓVIL: Drawer + Overlay + Hamburguesa
+   (reemplaza las reglas antiguas que ocultaban la sidebar)
+   ========================= */
+
+/* Hamburguesa oculta en desktop */
+.admin-burger{
+  display:none;
+  margin-right: 8px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.4);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+@media (max-width: 720px){
+  .admin-burger{ display:inline-flex; align-items:center; }
+}
+
+/* Overlay */
+.admin-overlay{
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 60; /* por encima del header 50 y del sidebar 65 */
+}
+
+/* Drawer lateral en móvil */
 @media (max-width: 720px) {
   .admin-layout { grid-template-columns: 1fr; }
-  .admin-sidebar {
-    position: relative;
-    top: 0;
-    min-height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+
+  .admin-sidebar{
+    position: fixed;
+    top: var(--admin-header-h);
+    left: 0;
+    bottom: 0;
+    width: 80%;
+    max-width: 320px;
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    z-index: 65;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    overflow: auto;
   }
+  .admin-sidebar.is-open{ transform: translateX(0); }
+
+  /* El contenido ocupa todo */
+  .admin-content{ padding: 16px; }
 }
+
+/* Mejoras touch-friendly en móvil */
+@media (max-width: 720px) {
+  .admin-card {
+    padding: 16px;
+    border-radius: 12px;
+    width: 100%;
+  }
+  .admin-cta, .admin-input { width: 100%; }
+}
+/* Mejoras de usabilidad en móvil */
+@media (max-width: 720px) {
+  .admin-input{
+    font-size: 16px; /* evita zoom automático en iOS */
+    padding: 12px 14px;
+  }
+  .admin-cta{
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  .admin-card h2{ font-size: clamp(18px, 4.5vw, 22px); }
+}
+
+/* Espacios entre controles en tarjetas */
+.admin-card .admin-input + .admin-input { margin-top: 8px; }
+.admin-card .admin-cta { margin-top: 6px; }

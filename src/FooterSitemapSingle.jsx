@@ -1,4 +1,3 @@
-
 // src/FooterSitemapSingle.jsx
 import { useState } from "react";
 import "./footer-sitemap-single.css";

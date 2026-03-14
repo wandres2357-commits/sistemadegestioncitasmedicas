@@ -1,4 +1,3 @@
-
 /* src/App.css */
 :root{
   --primary: #1976d2;
@@ -130,6 +129,25 @@ main{
   border-radius: 10px; border: 1px solid #cfe8ff;
   outline: none; transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
   background: #fcfdff;
+  
+/* Mejoras de usabilidad en móvil */
+@media (max-width: 720px) {
+  .admin-input{
+    font-size: 16px; /* evita zoom automático en iOS */
+    padding: 12px 14px;
+  }
+  .admin-cta{
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  .admin-card h2{ font-size: clamp(18px, 4.5vw, 22px); }
+}
+
+/* Espacios entre controles en tarjetas */
+.admin-card .admin-input + .admin-input { margin-top: 8px; }
+.admin-card .admin-cta { margin-top: 6px; }
+
 }
 .input:focus{
   border-color: var(--primary);
@@ -142,6 +160,26 @@ main{
   background: var(--accent); color: #fff; font-weight: 700; cursor: pointer;
   transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
   box-shadow: 0 8px 18px rgba(46,125,50,.16);
+
+  
+/* Mejoras de usabilidad en móvil */
+@media (max-width: 720px) {
+  .admin-input{
+    font-size: 16px; /* evita zoom automático en iOS */
+    padding: 12px 14px;
+  }
+  .admin-cta{
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  .admin-card h2{ font-size: clamp(18px, 4.5vw, 22px); }
+}
+
+/* Espacios entre controles en tarjetas */
+.admin-card .admin-input + .admin-input { margin-top: 8px; }
+.admin-card .admin-cta { margin-top: 6px; }
+
 }
 .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 24px rgba(46,125,50,.22); }
 .btn:active{ transform: translateY(0); }
@@ -164,3 +202,5 @@ main{
   .menu::-webkit-scrollbar-thumb{ background: #d9e9ff; border-radius: 8px; }
   .right{ display: none; }
 }
+:root{ --nav-h: 72px; }
+main > * { scroll-margin-top: calc(var(--nav-h) + 12px); }

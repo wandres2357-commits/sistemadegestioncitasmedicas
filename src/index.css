@@ -3,9 +3,11 @@
   line-height: 1.5;
   font-weight: 400;
 
+  /* ⚠️ Comentado: esto estaba forzando modo oscuro global
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+  */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -40,6 +42,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
+
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
@@ -52,6 +55,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* ⚠️ Comentado: estaba reactivando modo claro/oscuro automático
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -64,6 +68,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+*/
+
 /* =========================
    LAYOUT RESPONSIVE SGCM
    ========================= */
@@ -72,14 +78,16 @@ button:focus-visible {
   box-sizing: border-box;
 }
 
-/* Tablets y móviles */
+/* ⚠️ Comentado: ESTO ERA MUY PELIGROSO
+   Afectaba TODA tu app, incluyendo App.jsx, AdminShell,
+   Login modal, etc.
+*/
+/*
 @media (max-width: 1024px) {
-  /* contenedor principal */
   div[style*="display: flex"] {
     flex-direction: column;
   }
 
-  /* menú lateral */
   aside {
     width: 100% !important;
     min-height: auto !important;
@@ -87,16 +95,15 @@ button:focus-visible {
     border-bottom: 1px solid #ddd;
   }
 
-  /* ítems del menú siguen VERTICALES */
   aside > div {
     width: 100%;
   }
 
-  /* contenido */
-  main {
+  .app main {
     padding: 20px !important;
   }
 }
+*/
 
 /* Móviles */
 @media (max-width: 600px) {
@@ -106,12 +113,12 @@ button:focus-visible {
     gap: 10px;
   }
 
-  main {
+  .app main {
     padding: 16px !important;
   }
 
   /* cards full width */
-  main > div {
+  .app main > div {
     max-width: 100% !important;
   }
 }
