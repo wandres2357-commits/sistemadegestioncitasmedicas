@@ -246,11 +246,11 @@ export default function App() {
             </div>
 
           <p style={{ lineHeight: "1.6", marginBottom: "12px", textAlign: "justify", color: "#444" }}>
-    El <strong>SGCM (Sistema de Gestión de Citas Médicas)</strong> es una herramienta tecnológica creada
-    para mejorar la organización y administración de las citas en los servicios de salud. Surge como 
-    una alternativa a los métodos manuales, permitiendo automatizar la programación, consulta y control
-    de citas médicas. Además, facilita la interacción entre pacientes, personal administrativo y profesionales
-    de la salud, contribuyendo a una atención más organizada, rápida y eficiente.
+    En el año 2025<strong>SGCM (Sistema de Gestión de Citas Médicas)</strong> se desarrolla como una herramienta
+    tecnológica de sistema de Información para mejorar la organización y administración de las citas en los servicios
+    de salud. Surge como una alternativa a los métodos manuales, permitiendo automatizar la programación, consulta y control
+    de citas médicas. Además, facilita la interacción entre pacientes, personal administrativo y profesionales de la salud, 
+    contribuyendo a una atención más organizada, rápida y eficiente.
   </p>
 </Card>
         )}
