@@ -1,4 +1,11 @@
-// index.jsx
-// Este archivo solo importa el entry real (main.jsx) para mantener compatibilidad
-// con herramientas o convenciones que esperan un index.jsx.
-import "./main.jsx";
+// src/main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css"; // si ya existe, fine
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
