@@ -1,7 +1,9 @@
+
+// src/main.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import Login from "./Login";
+import App from "./App.jsx";        // <-- ajusta la extensión según tu archivo real
+import Login from "./Login.jsx";    // <-- ajusta si es .js
 import { getSession } from "./auth";
 
 function Root() {
@@ -31,7 +33,7 @@ function Root() {
     };
   }, [readAuth]);
 
-  // Si ya hay sesión activa, asegúrate de cerrar el modal de login
+  // Si ya hay sesión activa, cierra el modal de login
   useEffect(() => {
     if (isLogged) setShowLogin(false);
   }, [isLogged]);
@@ -59,7 +61,7 @@ function Root() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 1001
+            zIndex: 1001,
           }}
         >
           <div style={{ position: "relative" }}>
@@ -73,7 +75,7 @@ function Root() {
                 border: "1px solid #ddd",
                 borderRadius: 4,
                 padding: "6px 10px",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               ✕

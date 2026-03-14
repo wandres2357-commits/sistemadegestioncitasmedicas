@@ -1,30 +1,74 @@
+
 // src/App.jsx
 import { useState, useEffect } from "react";
 import AdminShell from "./dashboards/AdminShell";
-import "./App.css"; // <= importante
+import "./App.css"; // <= importa tus estilos
 
 export default function App() {
   const [view, setView] = useState("inicio");
-  // ... (tu lógica de auth sin cambios)
 
+  // --- AUTH como lo tenías ---
+  const readAuth = () => {
+    let role = localStorage.getItem("role");
+    let token = localStorage.getItem("token");
+    if (!role || !token) {
+      try {
+        const session = JSON.parse(localStorage.getItem("session"));
+        if (session) {
+          role = role || (session.role ? String(session.role).toLowerCase() : null);
+          token = token || session.token;
+        }
+      } catch {}
+    }
+    return { role, isLogged: !!token };
+  };
+
+  const init = readAuth();
+  const [role, setRole] = useState(init.role);
+  const [isLogged, setIsLogged] = useState(init.isLogged);
+
+  const isAdmin = role === "admin" || role === "administrador";
+
+  useEffect(() => {
+    const syncAuth = () => {
+      const { role, isLogged } = readAuth();
+      setRole(role);
+      setIsLogged(isLogged);
+    };
+    syncAuth();
+    window.addEventListener("storage", syncAuth);
+    window.addEventListener("auth:updated", syncAuth);
+    return () => {
+      window.removeEventListener("storage", syncAuth);
+      window.removeEventListener("auth:updated", syncAuth);
+    };
+  }, []);
+
+  // Si es admin y está logueado, renderiza el SHELL ADMIN
   if (isLogged && isAdmin) {
     const session = (() => {
-      try { return JSON.parse(localStorage.getItem("session")); } catch { return null; }
+      try {
+        return JSON.parse(localStorage.getItem("session"));
+      } catch {
+        return null;
+      }
     })();
     return <AdminShell user={session} onLogout={() => setView("inicio")} />;
   }
 
+  // --- COMPONENTES BASE ---
   const Card = ({ children }) => <div className="card">{children}</div>;
   const Input = (props) => <input {...props} className="input" />;
   const Button = ({ label }) => <button className="btn">{label}</button>;
 
   return (
     <div className="app">
-      {/* NAV SUPERIOR */}
+      {/* NAV SUPERIOR (FIJO) */}
       <header className="topbar" role="banner">
         <div className="topbar-inner">
+          {/* LOGO + Marca */}
           <div className="brand" aria-label="SGCM">
-            {/* Reemplaza por tu logo si quieres */}
+            {/* SVG (puedes reemplazar por tu imagen) */}
             <svg className="logo" viewBox="0 0 48 48" aria-hidden="true">
               <defs>
                 <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
@@ -36,13 +80,16 @@ export default function App() {
               <rect x="21" y="10" width="6" height="28" rx="3" fill="#fff" />
               <rect x="10" y="21" width="28" height="6" rx="3" fill="#fff" />
             </svg>
+
             <div>
               <div className="brand-title">SGCM – Sistema de Gestión de Citas Médicas</div>
               <div className="brand-sub">Salud • Calidad • Confianza</div>
             </div>
           </div>
 
+          {/* MENÚ CENTRADO */}
           <ul className="menu" role="menubar" aria-label="Navegación principal">
+            {/* Opción directa */}
             <li className="nav-item" role="none">
               <button
                 className={`link ${view === "inicio" ? "active" : ""}`}
@@ -53,6 +100,7 @@ export default function App() {
               </button>
             </li>
 
+            {/* ¿Quiénes somos? */}
             <li className="nav-item" role="none">
               <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
                 ¿Quiénes Somos?
@@ -66,8 +114,11 @@ export default function App() {
               </div>
             </li>
 
+            {/* Novedades */}
             <li className="nav-item" role="none">
-              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">Novedades</button>
+              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                Novedades
+              </button>
               <div className="dropdown" role="menu" aria-label="Novedades">
                 <button className={`menu-btn ${view === "noticias" ? "active" : ""}`} onClick={() => setView("noticias")}>Noticias</button>
                 <button className={`menu-btn ${view === "actualizaciones" ? "active" : ""}`} onClick={() => setView("actualizaciones")}>Actualizaciones</button>
@@ -75,8 +126,11 @@ export default function App() {
               </div>
             </li>
 
+            {/* Soporte */}
             <li className="nav-item" role="none">
-              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">Soporte</button>
+              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                Soporte
+              </button>
               <div className="dropdown" role="menu" aria-label="Soporte">
                 <button className={`menu-btn ${view === "ayuda" ? "active" : ""}`} onClick={() => setView("ayuda")}>Ayuda</button>
                 <button className={`menu-btn ${view === "faq" ? "active" : ""}`} onClick={() => setView("faq")}>Preguntas Frecuentes</button>
@@ -84,14 +138,18 @@ export default function App() {
               </div>
             </li>
 
+            {/* Contáctenos */}
             <li className="nav-item" role="none">
-              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">Contáctenos</button>
+              <button className="link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                Contáctenos
+              </button>
               <div className="dropdown" role="menu" aria-label="Contáctenos">
                 <button className={`menu-btn ${view === "contacto" ? "active" : ""}`} onClick={() => setView("contacto")}>Formulario de Contacto</button>
               </div>
             </li>
           </ul>
 
+          {/* Acciones derecha */}
           <div className="right">
             <span className="badge">Público</span>
             <button
@@ -105,9 +163,91 @@ export default function App() {
         </div>
       </header>
 
-      {/* CONTENIDO */}
+      {/* ======= CONTENIDO ======= */}
       <main>
-        {/* ... tus Cards según 'view' (igual que ya lo tienes) ... */}
+        {view === "inicio" && (
+          <Card>
+            <h2>Inicio</h2>
+            <p>Contenido público del sistema.</p>
+          </Card>
+        )}
+
+        {view === "historia" && (
+          <Card>
+            <h2>Historia</h2>
+            <p>Contenido histórico.</p>
+          </Card>
+        )}
+        {view === "mision" && (
+          <Card>
+            <h2>Misión</h2>
+            <p>Nuestra misión institucional.</p>
+          </Card>
+        )}
+        {view === "vision" && (
+          <Card>
+            <h2>Visión</h2>
+            <p>Nuestra visión institucional.</p>
+          </Card>
+        )}
+        {view === "politica" && (
+          <Card>
+            <h2>Política de Calidad</h2>
+            <p>Compromiso con la calidad.</p>
+          </Card>
+        )}
+        {view === "info" && (
+          <Card>
+            <h2>Información Institucional</h2>
+            <p>Datos institucionales.</p>
+          </Card>
+        )}
+
+        {view === "noticias" && (
+          <Card>
+            <h2>Noticias</h2>
+          </Card>
+        )}
+        {view === "actualizaciones" && (
+          <Card>
+            <h2>Actualizaciones</h2>
+          </Card>
+        )}
+        {view === "boletines" && (
+          <Card>
+            <h2>Boletines</h2>
+          </Card>
+        )}
+
+        {view === "ayuda" && (
+          <Card>
+            <h2>Ayuda</h2>
+          </Card>
+        )}
+        {view === "faq" && (
+          <Card>
+            <h2>Preguntas Frecuentes</h2>
+          </Card>
+        )}
+
+        {view === "pqr" && (
+          <Card>
+            <h2>PQR</h2>
+            <Input placeholder="Asunto" />
+            <Input placeholder="Descripción" />
+            <Button label="Enviar" />
+          </Card>
+        )}
+
+        {view === "contacto" && (
+          <Card>
+            <h2>Formulario de Contacto</h2>
+            <Input placeholder="Nombre" />
+            <Input placeholder="Correo" />
+            <Input placeholder="Mensaje" />
+            <Button label="Enviar" />
+          </Card>
+        )}
       </main>
     </div>
   );
