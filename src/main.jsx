@@ -1,9 +1,8 @@
-
 // src/main.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";        // <-- ajusta la extensión según tu archivo real
-import Login from "./Login.jsx";    // <-- ajusta si es .js
+import App from "./App.jsx";
+import Login from "./Login.jsx";
 import { getSession } from "./auth";
 
 function Root() {
@@ -27,9 +26,15 @@ function Root() {
     sync();
     window.addEventListener("storage", sync);
     window.addEventListener("auth:updated", sync);
+
+    // 👇 Escucha el evento que dispara el botón de la barra (App.jsx)
+    const openLogin = () => setShowLogin(true);
+    window.addEventListener("auth:open", openLogin);
+
     return () => {
       window.removeEventListener("storage", sync);
       window.removeEventListener("auth:updated", sync);
+      window.removeEventListener("auth:open", openLogin);
     };
   }, [readAuth]);
 
@@ -41,16 +46,6 @@ function Root() {
   return (
     <>
       <App />
-
-      {/* Botón para abrir el login: SOLO si NO estás logueado */}
-      {!isLogged && !showLogin && (
-        <button
-          onClick={() => setShowLogin(true)}
-          style={{ position: "fixed", top: 20, right: 20, zIndex: 1000 }}
-        >
-          Iniciar sesión
-        </button>
-      )}
 
       {/* Login como modal CENTRADO, SIN fondo desvanecido detrás */}
       {showLogin && !isLogged && (
