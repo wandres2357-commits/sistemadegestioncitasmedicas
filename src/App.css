@@ -1,3 +1,4 @@
+
 /* src/App.css */
 :root{
   --primary: #1976d2;
@@ -13,7 +14,12 @@
 
 *{ box-sizing: border-box; }
 html, body, #root { height: 100%; }
-body { margin: 0; background: var(--bg); font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; color: var(--text); }
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  color: var(--text);
+}
 
 .app { min-height: 100vh; }
 
@@ -65,7 +71,8 @@ body { margin: 0; background: var(--bg); font-family: "Segoe UI", system-ui, -ap
 .link:hover{ background: #e3f2fd; }
 .link.active{ background: var(--primary); color: #fff; }
 .link::after{
-  content: ""; position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px;
+  content: "";
+  position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px;
   background: linear-gradient(90deg, var(--primary), var(--primary-2));
   transform: scaleX(0); transform-origin: left; transition: transform .25s ease; border-radius: 2px;
 }
@@ -124,30 +131,16 @@ main{
 }
 .card h2{ margin-top: 0; color: var(--primary); }
 
+/* Inputs públicos (no admin) */
 .input{
-  width: 100%; padding: 10px 12px; margin-bottom: 14px;
-  border-radius: 10px; border: 1px solid #cfe8ff;
-  outline: none; transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #cfe8ff;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
   background: #fcfdff;
-  
-/* Mejoras de usabilidad en móvil */
-@media (max-width: 720px) {
-  .admin-input{
-    font-size: 16px; /* evita zoom automático en iOS */
-    padding: 12px 14px;
-  }
-  .admin-cta{
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 16px;
-  }
-  .admin-card h2{ font-size: clamp(18px, 4.5vw, 22px); }
-}
-
-/* Espacios entre controles en tarjetas */
-.admin-card .admin-input + .admin-input { margin-top: 8px; }
-.admin-card .admin-cta { margin-top: 6px; }
-
 }
 .input:focus{
   border-color: var(--primary);
@@ -155,35 +148,17 @@ main{
   background: #fff;
 }
 
+/* Botón público (no admin) */
 .btn{
   padding: 10px 18px; border: none; border-radius: 10px;
   background: var(--accent); color: #fff; font-weight: 700; cursor: pointer;
   transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
   box-shadow: 0 8px 18px rgba(46,125,50,.16);
-
-  
-/* Mejoras de usabilidad en móvil */
-@media (max-width: 720px) {
-  .admin-input{
-    font-size: 16px; /* evita zoom automático en iOS */
-    padding: 12px 14px;
-  }
-  .admin-cta{
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 16px;
-  }
-  .admin-card h2{ font-size: clamp(18px, 4.5vw, 22px); }
-}
-
-/* Espacios entre controles en tarjetas */
-.admin-card .admin-input + .admin-input { margin-top: 8px; }
-.admin-card .admin-cta { margin-top: 6px; }
-
 }
 .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 24px rgba(46,125,50,.22); }
 .btn:active{ transform: translateY(0); }
 
+/* Animación */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -202,7 +177,8 @@ main{
   .menu::-webkit-scrollbar-thumb{ background: #d9e9ff; border-radius: 8px; }
   .right{ display: none; }
 }
-:root{ --nav-h: 72px; }
+
+/* Distancia de anclaje al navegar dentro de main */
 main > * { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
 /* === Marca de agua global sobre toda la app === */
@@ -213,7 +189,7 @@ main > * { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
 .app::before{
   content: "";
-  position: fixed; /* queda anclada al viewport */
+  position: fixed; /* anclada al viewport */
   inset: 0;        /* cubre toda la ventana */
   z-index: -1;     /* detrás de todo el contenido */
   pointer-events: none;
@@ -227,17 +203,16 @@ main > * { scroll-margin-top: calc(var(--nav-h) + 12px); }
   filter: saturate(0.9) contrast(0.95) opacity(0.18); /* baja intensidad */
 }
 
-/* Si prefieres que no se mueva con el scroll y que sea una sola imagen centrada: */
-/*
+/* Variante (opcional): imagen centrada, tamaño fijo y sin cubrir
 .app::before{
   background:
     radial-gradient(ellipse at center, rgba(255,255,255,0.7), rgba(255,255,255,0.92) 60%),
     url("/assets/watermark.jpg") center 20% no-repeat;
-  background-size: min(680px, 70vw) auto; 
+  background-size: min(680px, 70vw) auto;
 }
 */
 
-/* Respeto a usuarios que prefieren menos transparencia/efectos */
+/* Accesibilidad: usuarios que prefieren menos transparencia */
 @media (prefers-reduced-transparency: reduce) {
   .app::before{ filter: opacity(0.08) !important; }
 }
