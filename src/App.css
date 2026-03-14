@@ -204,3 +204,40 @@ main{
 }
 :root{ --nav-h: 72px; }
 main > * { scroll-margin-top: calc(var(--nav-h) + 12px); }
+
+/* === Marca de agua global sobre toda la app === */
+.app {
+  position: relative; /* crea contexto para el ::before */
+  isolation: isolate; /* asegura capas separadas */
+}
+
+.app::before{
+  content: "";
+  position: fixed; /* queda anclada al viewport */
+  inset: 0;        /* cubre toda la ventana */
+  z-index: -1;     /* detrás de todo el contenido */
+  pointer-events: none;
+
+  /* Fondo con la imagen + un suave degradado para mejorar legibilidad */
+  background:
+    radial-gradient(ellipse at center, rgba(255,255,255,0.7), rgba(255,255,255,0.9) 60%),
+    url("/assets/watermark.jpg") center center no-repeat;
+
+  background-size: cover; /* ajusta a toda la ventana */
+  filter: saturate(0.9) contrast(0.95) opacity(0.18); /* baja intensidad */
+}
+
+/* Si prefieres que no se mueva con el scroll y que sea una sola imagen centrada: */
+/*
+.app::before{
+  background:
+    radial-gradient(ellipse at center, rgba(255,255,255,0.7), rgba(255,255,255,0.92) 60%),
+    url("/assets/watermark.jpg") center 20% no-repeat;
+  background-size: min(680px, 70vw) auto; 
+}
+*/
+
+/* Respeto a usuarios que prefieren menos transparencia/efectos */
+@media (prefers-reduced-transparency: reduce) {
+  .app::before{ filter: opacity(0.08) !important; }
+}
