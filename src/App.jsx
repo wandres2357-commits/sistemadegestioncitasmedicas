@@ -255,10 +255,37 @@ export default function App() {
 </Card>
         )}
         {view === "mision" && (
-          <Card>
-            <h2>Misión</h2>
-            <p>Nuestra misión institucional.</p>
-          </Card>
+         <Card
+  style={{
+    padding: "20px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+    borderLeft: "6px solid #28a745",
+    backgroundColor: "#ffffff"
+  }}
+>
+  <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
+    <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>🎯</span>
+    <h2 style={{ margin: 0 }}>Misión</h2>
+  </div>
+
+  <p
+    style={{
+      lineHeight: "1.6",
+      textAlign: "justify",
+      color: "#444",
+      fontSize: "0.95rem"
+    }}
+  >
+    Brindar una <strong>plataforma tecnológica eficiente</strong> que permita
+    gestionar de manera organizada y ágil la programación de
+    <strong> citas médicas</strong>, facilitando la interacción entre
+    pacientes, personal administrativo y profesionales de la salud. El sistema
+    busca <strong>mejorar la calidad del servicio</strong>, optimizar los
+    tiempos de atención y garantizar una adecuada administración de la
+    información.
+  </p>
+</Card>
         )}
         {view === "vision" && (
           <Card>
