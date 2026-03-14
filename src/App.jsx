@@ -120,6 +120,7 @@ export default function App() {
   const Card = ({ children }) => <div className="card">{children}</div>;
   const Input = (props) => <input {...props} className="input" />;
   const Button = ({ label }) => <button className="btn">{label}</button>;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="app">
@@ -129,6 +130,13 @@ export default function App() {
 
           {/* LOGO + Marca */}
           <div className="brand" aria-label="SGCM">
+            <button
+               className="hamburger"
+               onClick={() => setMenuOpen(!menuOpen)}
+               aria-label="Abrir menú"
+              >
+                {menuOpen ? "✕" : "☰"}
+            </button>
             <svg className="logo" viewBox="0 0 48 48" aria-hidden="true">
               <defs>
                 <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
@@ -153,7 +161,8 @@ export default function App() {
           </div>
 
           {/* MENÚ CENTRADO */}
-          <ul className="menu" role="menubar" aria-label="Navegación principal">
+          <ul className={`menu ${menuOpen ? "menu-open" : ""}`} 
+          role="menubar" aria-label="Navegación principal">
 
             <li className="nav-item" role="none">
               <button
