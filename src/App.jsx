@@ -288,10 +288,35 @@ export default function App() {
 </Card>
         )}
         {view === "vision" && (
-          <Card>
-            <h2>Visión</h2>
-            <p>Nuestra visión institucional.</p>
-          </Card>
+        <Card
+  style={{
+    padding: "20px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+    borderLeft: "6px solid #6f42c1",
+    backgroundColor: "#ffffff"
+  }}
+>
+  <div style={{ display: "flex", alignItems: "center", marginBottom: "12px" }}>
+    <span style={{ fontSize: "1.6rem", marginRight: "8px" }}>👁️</span>
+    <h2 style={{ margin: 0 }}>Visión</h2>
+  </div>
+
+  <p
+    style={{
+      lineHeight: "1.6",
+      textAlign: "justify",
+      color: "#444",
+      fontSize: "0.95rem"
+    }}
+  >
+    Ser un <strong>sistema de referencia en la gestión digital de citas médicas</strong>,
+    reconocido por su eficiencia, confiabilidad y facilidad de uso. El SGCM busca
+    contribuir a la <strong>modernización de los servicios de salud</strong> y a la
+    mejora continua en la atención de los pacientes mediante el uso de
+    <strong> tecnologías de información</strong>.
+  </p>
+</Card>
         )}
         {view === "politica" && (
           <Card>
