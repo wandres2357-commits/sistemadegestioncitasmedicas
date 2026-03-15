@@ -31,9 +31,9 @@ export default function Login({ onSuccess }) {
 
       const data = await res.json();
 
-      login(data); // 👈 usa el contexto
+     login(data);
 
-      login(data);
+     if (onSuccess) onSuccess();
 
     } catch {
       setError("Usuario o contraseña incorrecta");
