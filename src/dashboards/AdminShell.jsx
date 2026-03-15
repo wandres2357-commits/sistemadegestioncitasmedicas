@@ -1,50 +1,26 @@
 // src/dashboards/AdminShell.jsx
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState, useMemo } from "react";
 import AdminDashboard from "./AdminDashboard";
 import { logout } from "../auth";
-import "./admin.css"; // paleta/header/sidebar/menu (convive con Tailwind)
-import Button from "../components/ui/Button";
-import Card from "../components/ui/Card";
+import "./admin.css";
 
+function Card({ children }) {
+  return <div className="admin-card">{children}</div>;
+}
 function SectionTitle({ children }) {
   return <h2>{children}</h2>;
 }
 
 export default function AdminShell({ onLogout, user }) {
   const [section, setSection] = useState("home");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // 👈 NUEVO
 
-  // Refs para accesibilidad del menú
-  const sidebarRef = useRef(null);
-  const firstItemRef = useRef(null);
-
-  // Cerrar con Escape + bloqueo de scroll del body
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", onKeyDown);
-      // Foco al primer item del menú
-      setTimeout(() => firstItemRef.current?.focus(), 0);
-    } else {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKeyDown);
-    }
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [menuOpen]);
-
-  const MenuItem = ({ label, value, icon, refProp }) => (
+  const MenuItem = ({ label, value, icon }) => (
     <button
       type="button"
-      ref={refProp}
       onClick={() => {
         setSection(value);
-        setMenuOpen(false); // cerrar al navegar
+        setMenuOpen(false); // cierra al navegar
       }}
       className={`admin-menu-item ${
         section === value ? "admin-menu-item--active" : ""
@@ -108,22 +84,15 @@ export default function AdminShell({ onLogout, user }) {
 
   return (
     <div className="admin-app">
-      {/* Skip link para accesibilidad */}
-      <a href="#main-content" className="skip-link">
-        Saltar al contenido
-      </a>
-
       {/* HEADER */}
       <header className="admin-header" role="banner">
-        <div className="admin-header-inner container">
+        <div className="admin-header-inner">
           <div className="admin-title">
             {/* Hamburguesa solo en móvil */}
             <button
               type="button"
-              className="admin-burger lg:hidden inline-flex items-center justify-center"
+              className="admin-burger"
               aria-label="Abrir menú"
-              aria-expanded={menuOpen}
-              aria-controls="admin-sidebar"
               onClick={() => setMenuOpen(true)}
             >
               ☰
@@ -149,12 +118,17 @@ export default function AdminShell({ onLogout, user }) {
           </div>
 
           <div className="admin-actions">
-            <Button variant="primary" onClick={() => setSection("home")}>
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              onClick={() => setSection("home")}
+            >
               Inicio Admin
-            </Button>
+            </button>
 
-            <Button
-              variant="danger"
+            <button
+              type="button"
+              className="admin-btn admin-btn--danger"
               onClick={() => {
                 logout();
                 onLogout?.();
@@ -162,59 +136,30 @@ export default function AdminShell({ onLogout, user }) {
               }}
             >
               Cerrar sesión
-            </Button>
+            </button>
           </div>
         </div>
       </header>
 
-      {/* OVERLAY móvil */}
+      {/* OVERLAY para móvil */}
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="admin-overlay"
           onClick={() => setMenuOpen(false)}
           aria-hidden="true"
         />
       )}
 
-      {/* LAYOUT PRINCIPAL CON TAILWIND */}
-      <div className="min-h-dvh grid grid-cols-1 lg:grid-cols-[260px_1fr]">
+      {/* LAYOUT */}
+      <div className="admin-layout">
         {/* SIDEBAR */}
-        <aside
-          id="admin-sidebar"
-          ref={sidebarRef}
-          aria-label="Menú de administración"
-          className={[
-            // Base visual: usa tu paleta brand si ya la definiste en Tailwind
-            "bg-brand-surface border-r border-brand-border",
-            // Drawer móvil con scroll interno
-            "fixed inset-y-0 left-0 w-64 z-50 transform transition-transform duration-300 overflow-y-auto",
-            menuOpen ? "translate-x-0" : "-translate-x-full",
-            // Desktop: estático, altura controlada y scroll interno
-            "lg:static lg:translate-x-0 lg:block lg:h-[calc(100dvh-var(--admin-header-h))] lg:overflow-y-auto",
-            // Dark opcional
-            "dark:bg-slate-900 dark:text-white",
-          ].join(" ")}
-        >
+        <aside className={`admin-sidebar ${menuOpen ? "is-open" : ""}`}>
           <div className="admin-sidebar-head">
-            <span>Administrador del panel de control</span>
-            {/* Botón cerrar solo en móvil */}
-            <button
-              type="button"
-              className="admin-close lg:hidden"
-              aria-label="Cerrar menú"
-              onClick={() => setMenuOpen(false)}
-            >
-              ✕
-            </button>
+            Administrador del panel de control
           </div>
 
-          <nav className="admin-menu" role="navigation">
-            <MenuItem
-              refProp={firstItemRef}
-              label="Inicio Admin"
-              value="home"
-              icon="🏠"
-            />
+          <nav className="admin-menu" aria-label="Menú de administración">
+            <MenuItem label="Inicio Admin" value="home" icon="🏠" />
             <MenuItem label="Pacientes" value="pacientes" icon="👤" />
             <MenuItem label="Citas" value="citas" icon="📅" />
             <MenuItem label="Usuarios" value="usuarios" icon="🛡️" />
@@ -224,15 +169,7 @@ export default function AdminShell({ onLogout, user }) {
         </aside>
 
         {/* CONTENIDO */}
-        <main
-          id="main-content"
-          className="px-4 sm:px-6 lg:px-8 py-6 min-h-dvh bg-[var(--bg)]"
-        >
-          {/* container y márgenes idénticos al home */}
-          <div className="container mx-auto">
-            {content}
-          </div>
-        </main>
+        <main className="admin-content">{content}</main>
       </div>
     </div>
   );
