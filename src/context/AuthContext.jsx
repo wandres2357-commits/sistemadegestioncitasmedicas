@@ -1,49 +1,36 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-  useEffect(() => {
-    const session = localStorage.getItem("session");
-    if (session) {
-      setUser(JSON.parse(session));
-    }
-  }, []);
+  const login = (data) => {
 
-  const login = (sessionData) => {
-    localStorage.setItem("session", JSON.stringify(sessionData));
-    localStorage.setItem("token", sessionData.token);
-    localStorage.setItem("role", sessionData.role);
+    localStorage.setItem("user", JSON.stringify(data));
 
-    setUser(sessionData);
+    setUser(data); // 👈 ESTO ES LO QUE ACTUALIZA REACT
   };
 
   const logout = () => {
-    localStorage.removeItem("session");
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
 
-    setUser(null);
+    localStorage.removeItem("user");
+
+    setUser(null); // 👈 ESTO DISPARA EL RENDER
   };
 
+  const role = user?.role || null;
+  const isLogged = !!user;
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLogged: !!user,
-        role: user?.role,
-        login,
-        logout
-      }}
-    >
+    <AuthContext.Provider value={{ user, role, isLogged, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);

@@ -33,7 +33,7 @@ export default function Login({ onSuccess }) {
 
       login(data); // 👈 usa el contexto
 
-      onSuccess(data);
+      login(data);
 
     } catch {
       setError("Usuario o contraseña incorrecta");
