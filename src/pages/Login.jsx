@@ -1,18 +1,15 @@
-// src/pages/Login.jsx
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { saveSession } from "./auth";
 import "./login.css";
 
 export default function Login({ onSuccess }) {
-  const { login } = useAuth();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  const login = async () => {
     if (loading) return;
 
     setLoading(true);
@@ -22,16 +19,14 @@ export default function Login({ onSuccess }) {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password })
       });
 
       if (!res.ok) throw new Error();
 
       const data = await res.json();
-      // data = { token, role, username }  ✅ exacto como tu backend
-      await login(data);
-
-      if (onSuccess) onSuccess();
+      saveSession(data);
+      onSuccess(data);
     } catch {
       setError("Usuario o contraseña incorrecta");
     } finally {
@@ -40,8 +35,8 @@ export default function Login({ onSuccess }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleLogin();
-    };
+    if (e.key === "Enter") login();
+  };
 
   return (
     <div className="login-container fade-in">
@@ -51,7 +46,7 @@ export default function Login({ onSuccess }) {
         <input
           placeholder="Usuario"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={e => setUsername(e.target.value)}
           onKeyDown={handleKeyDown}
         />
 
@@ -60,7 +55,7 @@ export default function Login({ onSuccess }) {
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             onKeyDown={handleKeyDown}
           />
           <span onClick={() => setShowPassword(!showPassword)}>
@@ -70,7 +65,7 @@ export default function Login({ onSuccess }) {
 
         {error && <p className="error">{error}</p>}
 
-        <button onClick={handleLogin} disabled={loading}>
+        <button onClick={login} disabled={loading}>
           {loading ? "Iniciando sesión..." : "Entrar"}
         </button>
 
