@@ -1,4 +1,3 @@
-
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -29,15 +28,8 @@ export default function Login({ onSuccess }) {
       if (!res.ok) throw new Error();
 
       const data = await res.json();
-
-      // Asegúrate de mapear a lo que realmente devuelve tu API
-      const payload = {
-        user: data.user ?? { id: data.id, username: data.username },
-        role: data.role ?? data.user?.role ?? "usuario",
-        token: data.token ?? data.accessToken ?? null,
-      };
-
-      await login(payload);
+      // data = { token, role, username }  ✅ exacto como tu backend
+      await login(data);
 
       if (onSuccess) onSuccess();
     } catch {
@@ -49,7 +41,7 @@ export default function Login({ onSuccess }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") handleLogin();
-  };
+    };
 
   return (
     <div className="login-container fade-in">

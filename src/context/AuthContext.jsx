@@ -28,17 +28,19 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // 2) Login: espera el payload que devuelve tu backend
+  // 2) Login: ahora mapea { token, role, username } exactamente como tu backend
   const login = async (payload) => {
-    // payload típico del backend: { user, role, token, ... }
-    const nextUser = payload?.user ?? null;
-    const nextRole = payload?.role ?? null;
     const nextToken = payload?.token ?? null;
+    const nextRole = payload?.role ?? null;
+    const nextUsername = payload?.username ?? null;
+
+    // Construimos un "user" mínimo para mostrar en UI
+    const nextUser = nextUsername ? { username: nextUsername } : null;
 
     setUser(nextUser);
     setRole(nextRole);
     setToken(nextToken);
-    setIsLogged(true);
+    setIsLogged(Boolean(nextToken));
 
     localStorage.setItem(
       "auth",
@@ -46,7 +48,7 @@ export function AuthProvider({ children }) {
         user: nextUser,
         role: nextRole,
         token: nextToken,
-        isLogged: true,
+        isLogged: Boolean(nextToken),
       })
     );
   };
