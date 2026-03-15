@@ -20,10 +20,18 @@
   padding-right: max(0px, env(safe-area-inset-right));
 }
 
+/* Opción 1: mantener admin-content para safe areas en main */
 .admin-content {
   padding-left: max(16px, env(safe-area-inset-left));
   padding-right: max(16px, env(safe-area-inset-right));
 }
+
+/* Opción 2 (si prefieres utilitario en lugar de admin-content):
+.sa-px {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+*/
 
 @media (max-width: 720px) {
   .admin-sidebar {
@@ -148,7 +156,6 @@
   border: 1px solid transparent;
   transition: background .15s ease, border-color .15s ease;
 }
-
 .admin-menu-item:hover {
   background: #f1f5f9;
   border-color: #eef2f7;
@@ -161,7 +168,6 @@
   border-color: transparent;
   box-shadow: 0 8px 18px rgba(25,118,210,.18);
 }
-
 .admin-menu-item--active::before {
   content: "";
   width: 4px;
@@ -172,7 +178,7 @@
 }
 
 /* =========================
-   BOTONES ESPECÍFICOS (solo sidebar)
+   BOTONES ESPECÍFICOS (solo sidebar/header)
 ========================= */
 .admin-close {
   background: transparent;
@@ -192,11 +198,9 @@
   color: #fff;
 }
 
-/* Burger solo móvil */
-@media (min-width: 1025px) {
-  .admin-burger {
-    display: none;
-  }
+/* Burger solo en >= lg (alineado a Tailwind lg=1024px) */
+@media (min-width: 1024px) {
+  .admin-burger { display: none; }
 }
 
 /* =========================
@@ -227,45 +231,29 @@
     background: var(--surface);
     overflow-y: auto;
   }
-  .admin-sidebar.is-open {
-    transform: translateX(0);
-  }
+  .admin-sidebar.is-open { transform: translateX(0); }
 
-  .admin-content {
-    padding: 16px;
-  }
+  .admin-content { padding: 16px; }
 }
 
 /* =========================
-   TABLET LAYOUT (opcional)
+   TABLET LAYOUT — ELIMINADA regla de .admin-layout
+   (Tailwind controla el layout)
 ========================= */
-@media (max-width: 1024px) and (min-width: 721px) {
-  .admin-layout {
-    grid-template-columns: 1fr;
-  }
-  .admin-sidebar {
-    position: sticky;
-    top: var(--admin-header-h);
-    transform: none;
-    width: auto;
-  }
-}
+/* (intencionalmente vacío) */
 
 /* =========================
-   TÍTULOS
+   TÍTULOS (si sigues usando admin-card)
 ========================= */
 .admin-card h2 {
   font-size: clamp(18px, 2.2vw, 22px);
 }
 
 /* =========================
-   BOTONERA HEADER
+   BOTONERA HEADER (pantallas estrechas)
 ========================= */
 @media (max-width: 400px) {
-  .admin-actions {
-    gap: 6px;
-  }
-
+  .admin-actions { gap: 6px; }
   .admin-btn {
     padding: 7px 10px;
     border-radius: 9px;

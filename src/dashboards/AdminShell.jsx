@@ -1,9 +1,8 @@
-
 // src/dashboards/AdminShell.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import AdminDashboard from "./AdminDashboard";
 import { logout } from "../auth";
-import "./admin.css"; // mantenemos tu look & feel (paleta, header, etc.)
+import "./admin.css"; // paleta/header/sidebar/menu
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 
@@ -114,7 +113,7 @@ export default function AdminShell({ onLogout, user }) {
         Saltar al contenido
       </a>
 
-      {/* HEADER (mantiene tus estilos actuales) */}
+      {/* HEADER */}
       <header className="admin-header" role="banner">
         <div className="admin-header-inner container">
           <div className="admin-title">
@@ -168,7 +167,7 @@ export default function AdminShell({ onLogout, user }) {
         </div>
       </header>
 
-      {/* OVERLAY para móvil (Tailwind) */}
+      {/* OVERLAY móvil */}
       {menuOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -177,22 +176,20 @@ export default function AdminShell({ onLogout, user }) {
         />
       )}
 
-      {/* ===== LAYOUT PRINCIPAL MIGRADO A TAILWIND ===== */}
+      {/* LAYOUT PRINCIPAL CON TAILWIND */}
       <div className="min-h-dvh grid grid-cols-1 lg:grid-cols-[260px_1fr]">
-        {/* SIDEBAR (drawer en móvil, estático en desktop) */}
+        {/* SIDEBAR */}
         <aside
           id="admin-sidebar"
           ref={sidebarRef}
           aria-label="Menú de administración"
           className={[
-            // base visual
             "bg-white border-r",
             // drawer móvil
-            "fixed inset-y-0 left-0 w-64 z-50 transform transition-transform duration-300",
+            "fixed inset-y-0 left-0 w-64 z-50 transform transition-transform duration-300 overflow-y-auto",
             menuOpen ? "translate-x-0" : "-translate-x-full",
             // desktop
-            "lg:static lg:translate-x-0 lg:block",
-            // dark opcional (si activas modo oscuro)
+            "lg:static lg:translate-x-0 lg:block lg:h-[calc(100dvh-var(--admin-header-h))] lg:overflow-y-auto",
             "dark:bg-slate-900 dark:text-white",
           ].join(" ")}
         >
@@ -225,11 +222,13 @@ export default function AdminShell({ onLogout, user }) {
         </aside>
 
         {/* CONTENIDO */}
-        <main id="main-content" className="px-4 sm:px-6 lg:px-8 py-4">
+        <main
+          id="main-content"
+          className="px-4 sm:px-6 lg:px-8 py-6 bg-slate-50 min-h-dvh"
+        >
           {content}
         </main>
       </div>
     </div>
   );
 }
-``
