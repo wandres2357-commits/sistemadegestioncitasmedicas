@@ -1,26 +1,27 @@
 // src/dashboards/AdminShell.jsx
 import { useState, useMemo } from "react";
 import AdminDashboard from "./AdminDashboard";
-import { logout } from "../auth";
 import "./admin.css";
 
 function Card({ children }) {
   return <div className="admin-card">{children}</div>;
 }
+
 function SectionTitle({ children }) {
   return <h2>{children}</h2>;
 }
 
 export default function AdminShell({ onLogout, user }) {
+
   const [section, setSection] = useState("home");
-  const [menuOpen, setMenuOpen] = useState(false); // 👈 NUEVO
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const MenuItem = ({ label, value, icon }) => (
     <button
       type="button"
       onClick={() => {
         setSection(value);
-        setMenuOpen(false); // cierra al navegar
+        setMenuOpen(false);
       }}
       className={`admin-menu-item ${
         section === value ? "admin-menu-item--active" : ""
@@ -33,7 +34,9 @@ export default function AdminShell({ onLogout, user }) {
   );
 
   const content = useMemo(() => {
+
     switch (section) {
+
       case "home":
         return <AdminDashboard />;
 
@@ -80,15 +83,19 @@ export default function AdminShell({ onLogout, user }) {
       default:
         return <AdminDashboard />;
     }
+
   }, [section]);
 
   return (
     <div className="admin-app">
+
       {/* HEADER */}
       <header className="admin-header" role="banner">
         <div className="admin-header-inner">
+
           <div className="admin-title">
-            {/* Hamburguesa solo en móvil */}
+
+            {/* botón hamburguesa para móvil */}
             <button
               type="button"
               className="admin-burger"
@@ -98,7 +105,7 @@ export default function AdminShell({ onLogout, user }) {
               ☰
             </button>
 
-            {/* Logo mini */}
+            {/* logo mini */}
             <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
               <defs>
                 <linearGradient id="gadmin" x1="0" x2="1" y1="0" y2="1">
@@ -106,18 +113,22 @@ export default function AdminShell({ onLogout, user }) {
                   <stop offset="1" stopColor="#90caf9" />
                 </linearGradient>
               </defs>
+
               <circle cx="24" cy="24" r="18" fill="url(#gadmin)" />
               <rect x="22" y="12" width="4" height="24" rx="2" fill="#0d47a1" />
               <rect x="12" y="22" width="24" height="4" rx="2" fill="#0d47a1" />
             </svg>
 
             <span>SGCM — Panel de Administración</span>
-            {user?.username ? (
+
+            {user?.username && (
               <span className="admin-user">({user.username})</span>
-            ) : null}
+            )}
+
           </div>
 
           <div className="admin-actions">
+
             <button
               type="button"
               className="admin-btn admin-btn--primary"
@@ -129,19 +140,17 @@ export default function AdminShell({ onLogout, user }) {
             <button
               type="button"
               className="admin-btn admin-btn--danger"
-              onClick={() => {
-                logout();
-                onLogout?.();
-                window.dispatchEvent(new Event("auth:updated"));
-              }}
+              onClick={onLogout}
             >
               Cerrar sesión
             </button>
+
           </div>
+
         </div>
       </header>
 
-      {/* OVERLAY para móvil */}
+      {/* overlay móvil */}
       {menuOpen && (
         <div
           className="admin-overlay"
@@ -150,27 +159,36 @@ export default function AdminShell({ onLogout, user }) {
         />
       )}
 
-      {/* LAYOUT */}
+      {/* layout */}
       <div className="admin-layout">
+
         {/* SIDEBAR */}
         <aside className={`admin-sidebar ${menuOpen ? "is-open" : ""}`}>
+
           <div className="admin-sidebar-head">
             Administrador del panel de control
           </div>
 
           <nav className="admin-menu" aria-label="Menú de administración">
+
             <MenuItem label="Inicio Admin" value="home" icon="🏠" />
             <MenuItem label="Pacientes" value="pacientes" icon="👤" />
             <MenuItem label="Citas" value="citas" icon="📅" />
             <MenuItem label="Usuarios" value="usuarios" icon="🛡️" />
             <MenuItem label="Reportes" value="reportes" icon="📊" />
             <MenuItem label="Configuración" value="config" icon="⚙️" />
+
           </nav>
+
         </aside>
 
         {/* CONTENIDO */}
-        <main className="admin-content">{content}</main>
+        <main className="admin-content">
+          {content}
+        </main>
+
       </div>
+
     </div>
   );
 }
