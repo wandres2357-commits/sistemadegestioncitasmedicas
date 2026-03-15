@@ -1,8 +1,11 @@
-/* =========================
-   VARIABLES
-========================= */
+/* ===========================
+   ADMIN L&F (alineado con App.css)
+   Paleta, tipografía, sombras y animaciones consistentes
+=========================== */
+
 :root {
   --primary: #1976d2;
+  --primary-2: #42a5f5;
   --accent: #2e7d32;
   --bg: #f4f6f8;
   --text: #0f172a;
@@ -12,76 +15,15 @@
   --admin-header-h: 64px;
 }
 
-/* =========================
-   SAFE AREAS (NOTCH)
-========================= */
-.admin-header {
-  padding-left: max(0px, env(safe-area-inset-left));
-  padding-right: max(0px, env(safe-area-inset-right));
+/* Contenedor base */
+.admin-app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
 }
 
-/* Opción 1: mantener admin-content para safe areas en main */
-.admin-content {
-  padding-left: max(16px, env(safe-area-inset-left));
-  padding-right: max(16px, env(safe-area-inset-right));
-}
-
-/* Opción 2 (si prefieres utilitario en lugar de admin-content):
-.sa-px {
-  padding-left: max(16px, env(safe-area-inset-left));
-  padding-right: max(16px, env(safe-area-inset-right));
-}
-*/
-
-@media (max-width: 720px) {
-  .admin-sidebar {
-    padding-bottom: max(0px, env(safe-area-inset-bottom));
-  }
-}
-
-/* =========================
-   ACCESIBILIDAD
-========================= */
-.admin-menu-item:focus-visible,
-.admin-burger:focus-visible,
-.admin-close:focus-visible {
-  outline: 3px solid rgba(25, 118, 210, 0.45);
-  outline-offset: 2px;
-}
-
-/* Skip-link */
-.skip-link {
-  position: absolute;
-  left: -999px;
-  top: -999px;
-}
-.skip-link:focus {
-  left: 16px;
-  top: calc(var(--admin-header-h) + 8px);
-  z-index: 1000;
-  background: #fff;
-  color: #000;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border, #e5e7eb);
-}
-
-/* =========================
-   REDUCE MOTION
-========================= */
-@media (prefers-reduced-motion: reduce) {
-  .admin-card,
-  .admin-menu-item,
-  .admin-overlay,
-  .admin-sidebar {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* =========================
-   HEADER
-========================= */
+/* ======= HEADER (fijo) ======= */
 .admin-header {
   position: sticky;
   top: 0;
@@ -118,16 +60,50 @@
   opacity: 0.9;
 }
 
-/* =========================
-   SIDEBAR & MENU
-========================= */
+.admin-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.4);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease, transform .15s ease, box-shadow .2s ease;
+}
+.admin-btn:hover {
+  background: rgba(255,255,255,.08);
+}
+.admin-btn:active { transform: translateY(1px); }
+
+.admin-btn--primary {
+  background: #1565c0;
+  border: 1px solid rgba(255,255,255,.25);
+}
+.admin-btn--danger {
+  background: #c62828;
+  border: none;
+}
+
+/* ======= LAYOUT (sidebar + content) ======= */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  align-items: start;
+}
+
+/* ======= SIDEBAR ======= */
 .admin-sidebar {
   background: var(--surface);
   border-right: 1px solid var(--border);
   min-height: calc(100vh - var(--admin-header-h));
+  position: sticky;
+  top: var(--admin-header-h);
 }
 
-/* Head dentro del sidebar */
 .admin-sidebar-head {
   padding: 14px 16px;
   font-weight: 800;
@@ -136,7 +112,6 @@
   background: #eaf3ff;
 }
 
-/* Menú vertical */
 .admin-menu {
   display: flex;
   flex-direction: column;
@@ -154,20 +129,20 @@
   color: var(--text);
   background: transparent;
   border: 1px solid transparent;
-  transition: background .15s ease, border-color .15s ease;
+  transition: background .15s ease, color .15s ease, transform .1s ease, border-color .15s ease;
 }
 .admin-menu-item:hover {
   background: #f1f5f9;
   border-color: #eef2f7;
 }
-
-/* Activo */
 .admin-menu-item--active {
   background: var(--primary);
   color: #fff;
   border-color: transparent;
   box-shadow: 0 8px 18px rgba(25,118,210,.18);
 }
+
+/* Indicador a la izquierda (opcional) */
 .admin-menu-item--active::before {
   content: "";
   width: 4px;
@@ -177,48 +152,103 @@
   margin-right: 4px;
 }
 
-/* =========================
-   BOTONES ESPECÍFICOS (solo sidebar/header)
-========================= */
-.admin-close {
-  background: transparent;
-  border: 1px solid rgba(0,0,0,0.15);
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--text);
+/* ======= CONTENIDO ======= */
+.admin-content {
+  padding: 28px;
 }
 
-.admin-burger {
+.admin-card {
+  background: var(--surface);
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(2,6,23,.06);
+  animation: fadeUp .2s ease both;
+  max-width: 100%;
+}
+
+.admin-card h2 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+/* Inputs y botones igual que App.css */
+.admin-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #cfe8ff;
+  background: #fcfdff;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.admin-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(25,118,210,.18);
+  background: #fff;
+}
+
+.admin-cta {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  box-shadow: 0 8px 18px rgba(46,125,50,.16);
+}
+.admin-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(46,125,50,.22);
+}
+.admin-cta:active { transform: translateY(0); }
+
+/* Animación consistente */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ======= RESPONSIVE (Desktop/Tablet) ======= */
+@media (max-width: 960px) {
+  .admin-layout { grid-template-columns: 220px 1fr; }
+}
+
+/* =========================
+   MÓVIL: Drawer + Overlay + Hamburguesa
+   (reemplaza las reglas antiguas que ocultaban la sidebar)
+   ========================= */
+
+/* Hamburguesa oculta en desktop */
+.admin-burger{
+  display:none;
+  margin-right: 8px;
   background: transparent;
   border: 1px solid rgba(255,255,255,.4);
+  color: #fff;
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
-  color: #fff;
+}
+@media (max-width: 720px){
+  .admin-burger{ display:inline-flex; align-items:center; }
 }
 
-/* Burger solo en >= lg (alineado a Tailwind lg=1024px) */
-@media (min-width: 1024px) {
-  .admin-burger { display: none; }
-}
-
-/* =========================
-   OVERLAY (móvil)
-========================= */
-.admin-overlay {
-  position: fixed;
-  inset: 0;
+/* Overlay */
+.admin-overlay{
+  position: fixed; inset: 0;
   background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(2px);
-  z-index: 40;
+  z-index: 60; /* por encima del header 50 y del sidebar 65 */
 }
 
-/* =========================
-   RESPONSIVE: MOBILE DRAWER
-========================= */
+/* Drawer lateral en móvil */
 @media (max-width: 720px) {
-  .admin-sidebar {
+  .admin-layout { grid-template-columns: 1fr; }
+
+  .admin-sidebar{
     position: fixed;
     top: var(--admin-header-h);
     left: 0;
@@ -228,35 +258,39 @@
     transform: translateX(-100%);
     transition: transform .25s ease;
     z-index: 65;
+    border-right: 1px solid var(--border);
     background: var(--surface);
-    overflow-y: auto;
+    overflow: auto;
   }
-  .admin-sidebar.is-open { transform: translateX(0); }
+  .admin-sidebar.is-open{ transform: translateX(0); }
 
-  .admin-content { padding: 16px; }
+  /* El contenido ocupa todo */
+  .admin-content{ padding: 16px; }
 }
 
-/* =========================
-   TABLET LAYOUT — ELIMINADA regla de .admin-layout
-   (Tailwind controla el layout)
-========================= */
-/* (intencionalmente vacío) */
-
-/* =========================
-   TÍTULOS (si sigues usando admin-card)
-========================= */
-.admin-card h2 {
-  font-size: clamp(18px, 2.2vw, 22px);
-}
-
-/* =========================
-   BOTONERA HEADER (pantallas estrechas)
-========================= */
-@media (max-width: 400px) {
-  .admin-actions { gap: 6px; }
-  .admin-btn {
-    padding: 7px 10px;
-    border-radius: 9px;
-    font-size: 14px;
+/* Mejoras touch-friendly en móvil */
+@media (max-width: 720px) {
+  .admin-card {
+    padding: 16px;
+    border-radius: 12px;
+    width: 100%;
   }
+  .admin-cta, .admin-input { width: 100%; }
 }
+/* Mejoras de usabilidad en móvil */
+@media (max-width: 720px) {
+  .admin-input{
+    font-size: 16px; /* evita zoom automático en iOS */
+    padding: 12px 14px;
+  }
+  .admin-cta{
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  .admin-card h2{ font-size: clamp(18px, 4.5vw, 22px); }
+}
+
+/* Espacios entre controles en tarjetas */
+.admin-card .admin-input + .admin-input { margin-top: 8px; }
+.admin-card .admin-cta { margin-top: 6px; }
