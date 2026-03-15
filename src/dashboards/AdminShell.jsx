@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AdminDashboard from "./AdminDashboard";
 import { logout } from "../auth";
-import "./admin.css"; // paleta/header/sidebar/menu
+import "./admin.css"; // paleta/header/sidebar/menu (convive con Tailwind)
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 
@@ -184,12 +184,14 @@ export default function AdminShell({ onLogout, user }) {
           ref={sidebarRef}
           aria-label="Menú de administración"
           className={[
-            "bg-white border-r",
-            // drawer móvil
+            // Base visual: usa tu paleta brand si ya la definiste en Tailwind
+            "bg-brand-surface border-r border-brand-border",
+            // Drawer móvil con scroll interno
             "fixed inset-y-0 left-0 w-64 z-50 transform transition-transform duration-300 overflow-y-auto",
             menuOpen ? "translate-x-0" : "-translate-x-full",
-            // desktop
+            // Desktop: estático, altura controlada y scroll interno
             "lg:static lg:translate-x-0 lg:block lg:h-[calc(100dvh-var(--admin-header-h))] lg:overflow-y-auto",
+            // Dark opcional
             "dark:bg-slate-900 dark:text-white",
           ].join(" ")}
         >
@@ -224,9 +226,12 @@ export default function AdminShell({ onLogout, user }) {
         {/* CONTENIDO */}
         <main
           id="main-content"
-          className="px-4 sm:px-6 lg:px-8 py-6 bg-slate-50 min-h-dvh"
+          className="px-4 sm:px-6 lg:px-8 py-6 min-h-dvh bg-[var(--bg)]"
         >
-          {content}
+          {/* container y márgenes idénticos al home */}
+          <div className="container mx-auto">
+            {content}
+          </div>
         </main>
       </div>
     </div>

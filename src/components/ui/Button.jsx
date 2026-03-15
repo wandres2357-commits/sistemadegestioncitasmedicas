@@ -1,4 +1,3 @@
-
 // src/components/ui/Button.jsx
 export default function Button({
   children,
@@ -7,15 +6,18 @@ export default function Button({
   ...props
 }) {
   const base =
-    "inline-flex items-center justify-center rounded-md font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-11";
+    "inline-flex items-center justify-center rounded-md font-semibold transition-colors " +
+    "focus:outline-none focus:ring-2 min-h-11 disabled:opacity-60 disabled:cursor-not-allowed";
 
   const variants = {
     primary:
-      "px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 shadow-sm",
+      // usa tu color de marca
+      "px-4 py-2 bg-brand-primary text-white hover:bg-[color-mix(in_oklab,var(--primary),#000_12%)] " +
+      "focus:ring-[color:var(--primary-2)] shadow-sm",
     danger:
-      "px-4 py-2 bg-red-600 text-white hover:bg-red-700 shadow-sm",
+      "px-4 py-2 bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm",
     ghost:
-      "px-3 py-2 border border-slate-300 text-slate-800 hover:bg-slate-50",
+      "px-3 py-2 border border-brand-border text-brand-text hover:bg-slate-50",
   };
 
   return (

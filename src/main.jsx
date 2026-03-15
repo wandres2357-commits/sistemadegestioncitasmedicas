@@ -1,6 +1,14 @@
+
 // src/main.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom/client";
+
+// ✅ Estilos globales SIEMPRE aquí primero:
+// 1) Tailwind + utilidades globales
+import "./styles/index.css";
+// 2) Estilos del sitio público (topbar, container)
+import "./App.css";
+
 import App from "./App.jsx";
 import Login from "./Login.jsx";
 import { getSession } from "./auth";
@@ -27,7 +35,7 @@ function Root() {
     window.addEventListener("storage", sync);
     window.addEventListener("auth:updated", sync);
 
-    // 👇 Escucha el evento que dispara el botón de la barra (App.jsx)
+    // Escucha el evento que dispara el botón de la barra (App.jsx)
     const openLogin = () => setShowLogin(true);
     window.addEventListener("auth:open", openLogin);
 
@@ -47,9 +55,10 @@ function Root() {
     <>
       <App />
 
-      {/* Login como modal CENTRADO, SIN fondo desvanecido detrás */}
+      {/* Modal de Login centrado */}
       {showLogin && !isLogged && (
         <div
+          // Overlay (opcional) para evitar que “se mezcle” visualmente con el fondo
           style={{
             position: "fixed",
             inset: 0,
@@ -57,7 +66,11 @@ function Root() {
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1001,
+            background: "rgba(15, 23, 42, 0.45)", // similar a .admin-overlay
+            backdropFilter: "blur(2px)"
           }}
+          aria-modal="true"
+          role="dialog"
         >
           <div style={{ position: "relative" }}>
             <button
@@ -72,6 +85,7 @@ function Root() {
                 padding: "6px 10px",
                 cursor: "pointer",
               }}
+              aria-label="Cerrar login"
             >
               ✕
             </button>
