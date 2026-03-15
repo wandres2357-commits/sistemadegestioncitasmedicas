@@ -1,66 +1,22 @@
-// src/App.jsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "./context/AuthContext";
 import AdminShell from "./dashboards/AdminShell";
 import FooterSitemapSingle from "./FooterSitemapSingle";
+import Login from "./pages/Login";
 import "./App.css";
 
 export default function App() {
+
+  const { user, role, isLogged, logout } = useAuth();
+
   const [view, setView] = useState("inicio");
+  const [showLogin, setShowLogin] = useState(false);
 
-  // --- AUTH como lo tenías ---
-  const readAuth = () => {
-    let role = localStorage.getItem("role");
-    let token = localStorage.getItem("token");
-
-    if (!role || !token) {
-      try {
-        const session = JSON.parse(localStorage.getItem("session"));
-        if (session) {
-          role = role || (session.role ? String(session.role).toLowerCase() : null);
-          token = token || session.token;
-        }
-      } catch {}
-    }
-
-    return { role, isLogged: !!token };
-  };
-
-  const init = readAuth();
-  const [role, setRole] = useState(init.role);
-  const [isLogged, setIsLogged] = useState(init.isLogged);
   const isAdmin = role === "admin" || role === "administrador";
 
-  useEffect(() => {
-    const syncAuth = () => {
-      const { role, isLogged } = readAuth();
-      setRole(role);
-      setIsLogged(isLogged);
-    };
-
-    syncAuth();
-
-    window.addEventListener("storage", syncAuth);
-    window.addEventListener("auth:updated", syncAuth);
-
-    return () => {
-      window.removeEventListener("storage", syncAuth);
-      window.removeEventListener("auth:updated", syncAuth);
-    };
-  }, []);
-
-  // Si es admin y está logueado, renderiza el SHELL ADMIN
   if (isLogged && isAdmin) {
-    const session = (() => {
-      try {
-        return JSON.parse(localStorage.getItem("session"));
-      } catch {
-        return null;
-      }
-    })();
-
-    return <AdminShell user={session} onLogout={() => setView("inicio")} />;
+    return <AdminShell user={user} onLogout={logout} />;
   }
-
   // --- DATA DEL MAPA DEL SITIO ---
   const sitemapItems = [
     {
@@ -235,7 +191,7 @@ export default function App() {
 
             <button
               className="cta"
-              onClick={() => window.dispatchEvent(new Event("auth:open"))}
+              onClick={() => setShowLogin(true)}
               title="Abrir inicio de sesión"
             >
               Iniciar sesión
@@ -430,6 +386,10 @@ export default function App() {
 
       {/* ======= FOOTER ======= */}
       <FooterSitemapSingle items={sitemapItems} onNavigate={handleNavigate} />
+
+      {showLogin && (
+        <Login onSuccess={() => setShowLogin(false)} />
+      )}
 
     </div>
   );

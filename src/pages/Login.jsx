@@ -1,21 +1,26 @@
 import { useState } from "react";
-import { saveSession } from "./auth";
+import { useAuth } from "../context/AuthContext";
 import "./login.css";
 
 export default function Login({ onSuccess }) {
+
+  const { login } = useAuth();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const login = async () => {
+  const handleLogin = async () => {
+
     if (loading) return;
 
     setLoading(true);
     setError("");
 
     try {
+
       const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -25,22 +30,27 @@ export default function Login({ onSuccess }) {
       if (!res.ok) throw new Error();
 
       const data = await res.json();
-      saveSession(data);
+
+      login(data); // 👈 usa el contexto
+
       onSuccess(data);
+
     } catch {
       setError("Usuario o contraseña incorrecta");
     } finally {
       setLoading(false);
     }
+
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") login();
+    if (e.key === "Enter") handleLogin();
   };
 
   return (
     <div className="login-container fade-in">
       <div className="login-card">
+
         <h2>Iniciar sesión</h2>
 
         <input
@@ -58,6 +68,7 @@ export default function Login({ onSuccess }) {
             onChange={e => setPassword(e.target.value)}
             onKeyDown={handleKeyDown}
           />
+
           <span onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? "🙈" : "👁️"}
           </span>
@@ -65,11 +76,12 @@ export default function Login({ onSuccess }) {
 
         {error && <p className="error">{error}</p>}
 
-        <button onClick={login} disabled={loading}>
+        <button onClick={handleLogin} disabled={loading}>
           {loading ? "Iniciando sesión..." : "Entrar"}
         </button>
 
         {loading && <div className="spinner"></div>}
+
       </div>
     </div>
   );
