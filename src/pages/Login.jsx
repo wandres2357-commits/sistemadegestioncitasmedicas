@@ -1,9 +1,10 @@
+
+// src/pages/Login.jsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import "./login.css";
 
 export default function Login({ onSuccess }) {
-
   const { login } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -13,34 +14,37 @@ export default function Login({ onSuccess }) {
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
-
     if (loading) return;
 
     setLoading(true);
     setError("");
 
     try {
-
       const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
       });
 
       if (!res.ok) throw new Error();
 
       const data = await res.json();
 
-     login(data);
+      // Asegúrate de mapear a lo que realmente devuelve tu API
+      const payload = {
+        user: data.user ?? { id: data.id, username: data.username },
+        role: data.role ?? data.user?.role ?? "usuario",
+        token: data.token ?? data.accessToken ?? null,
+      };
 
-     if (onSuccess) onSuccess();
+      await login(payload);
 
+      if (onSuccess) onSuccess();
     } catch {
       setError("Usuario o contraseña incorrecta");
     } finally {
       setLoading(false);
     }
-
   };
 
   const handleKeyDown = (e) => {
@@ -50,13 +54,12 @@ export default function Login({ onSuccess }) {
   return (
     <div className="login-container fade-in">
       <div className="login-card">
-
         <h2>Iniciar sesión</h2>
 
         <input
           placeholder="Usuario"
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           onKeyDown={handleKeyDown}
         />
 
@@ -65,10 +68,9 @@ export default function Login({ onSuccess }) {
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-
           <span onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? "🙈" : "👁️"}
           </span>
@@ -81,7 +83,6 @@ export default function Login({ onSuccess }) {
         </button>
 
         {loading && <div className="spinner"></div>}
-
       </div>
     </div>
   );

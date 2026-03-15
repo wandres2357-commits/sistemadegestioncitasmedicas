@@ -1,3 +1,4 @@
+//src/App.jsx
 import { useState } from "react";
 import { useAuth } from "./context/AuthContext";
 import AdminShell from "./dashboards/AdminShell";
@@ -6,13 +7,17 @@ import Login from "./pages/Login";
 import "./App.css";
 
 export default function App() {
-  const { user, role, isLogged, logout } = useAuth();
+  const { user, role, isLogged, logout, initializing } = useAuth();
   const [view, setView] = useState("inicio");
   const [showLogin, setShowLogin] = useState(false);
 
-  // Cambio solicitado: usar optional chaining y toLowerCase()
   const isAdmin =
     role?.toLowerCase() === "admin" || role?.toLowerCase() === "administrador";
+
+  // Fallback para evitar pantallas en blanco durante la restauración
+  if (initializing) {
+    return <div style={{ padding: 16 }}>Verificando sesión…</div>;
+  }
 
   if (isLogged && isAdmin) {
     return <AdminShell user={user} onLogout={logout} />;
@@ -192,9 +197,7 @@ export default function App() {
               </button>
               <div className="dropdown" role="menu" aria-label="Novedades">
                 <button
-                  className={`menu-btn ${
-                    view === "noticias" ? "active" : ""
-                  }`}
+                  className={`menu-btn ${view === "noticias" ? "active" : ""}`}
                   onClick={() => setView("noticias")}
                 >
                   Noticias
@@ -208,9 +211,7 @@ export default function App() {
                   Actualizaciones
                 </button>
                 <button
-                  className={`menu-btn ${
-                    view === "boletines" ? "active" : ""
-                  }`}
+                  className={`menu-btn ${view === "boletines" ? "active" : ""}`}
                   onClick={() => setView("boletines")}
                 >
                   Boletines
@@ -272,13 +273,15 @@ export default function App() {
           {/* Acciones derecha */}
           <div className="right">
             <span className="badge">Público</span>
-            <button
-              className="cta"
-              onClick={() => setShowLogin(true)}
-              title="Abrir inicio de sesión"
-            >
-              Iniciar sesión
-            </button>
+            {!isLogged && (
+              <button
+                className="cta"
+                onClick={() => setShowLogin(true)}
+                title="Abrir inicio de sesión"
+              >
+                Iniciar sesión
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -492,11 +495,10 @@ export default function App() {
       {/* ======= FOOTER ======= */}
       <FooterSitemapSingle items={sitemapItems} onNavigate={handleNavigate} />
 
-      {/* Cambio solicitado: solo mostrar Login si no está logueado */}
+      {/* Mostrar Login solo si no está logueado */}
       {showLogin && !isLogged && (
         <Login onSuccess={() => setShowLogin(false)} />
       )}
     </div>
   );
 }
-``
